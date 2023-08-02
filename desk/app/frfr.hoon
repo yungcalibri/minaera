@@ -27,31 +27,17 @@
 ::
 ::  .^((set @p) %gx /(scot %p our)/pals/(scot %da now)/mutuals/noun)
 ::
-/-  *minaera, feed, service
-/+  verb, dbug, default-agent, *sss, n=nectar, *mip
+/-  *minaera, feed, *frfr, service
+/+  verb, dbug, default-agent, schooner, *sss, n=nectar, *mip
 |%
 ::
 +$  versioned-state  $%(state-0)
-::
-+$  score
-  $:  score=@rs 
-      beer=[from=(unit @p) weight=@rs]
-      alfie=(map @p [pos=@ud neg=@ud])
-  ==
 ::
 +$  state-0
   $:  %0
       neighbors=(set @p)
       scores=(mip @p @ score)
   ==
-::
-+$  frfr-action
-  $%  [%compute =ship]
-      [%add-edge =ship]
-      [%del-edge =ship]
-      [%placeholder ~]
-  ==
-::
 ::
 ::  boilerplate
 ::
@@ -181,12 +167,15 @@ my peers attests that the ship is definitely fake (%0) the confidence goes to 0.
                          *(set @p)
                        .^((set @p) %gx /=pals=/mutuals/noun)
   :_  this
-  ^-  (list card)
+  %+  welp
+    %-  limo
+    :~  :*  %pass  /eyre/connect  %arvo  %e
+            %connect  [~ /apps/frfr]  %frfr
+    ==  ==
   %-  zing
   %+  turn
     (snoc ~(tap in neighbors.state) our.bowl)
-  |=  a=@p
-  (pass-surf our.bowl a)
+  (cury pass-surf our.bowl)
 ::
 ++  on-save
   ^-  vase
@@ -289,6 +278,25 @@ my peers attests that the ship is definitely fake (%0) the confidence goes to 0.
       [[%feed %minaera *] *]  (handle-fake-on-rock:da-feed msg)
       [[%service *] *]  (handle-fake-on-rock:da-service msg)
     ==
+  ::
+      %handle-http-request
+    ?>  =(src.bowl our.bowl)
+    =/  req  !<([eyre-id=@ta =inbound-request:eyre] vase)
+    =*  dump
+      :_  state
+      (response:schooner eyre-id.req 404 ~ [%none ~])
+    =^  cards  state
+      ^-  (quip card _state)
+      ?.  authenticated.inbound-request.req  dump
+      ?+    method.request.inbound-request.req  dump
+      ::
+          %'GET'
+        ~(get handle-http req)
+      ::
+          %'POST'
+        ~(pot handle-http req)
+      ==
+    [cards this]
   ==
 ::
 ++  on-peek
@@ -345,7 +353,10 @@ my peers attests that the ship is definitely fake (%0) the confidence goes to 0.
   |=  =path
   ~>  %bout.[0 '%frfr +on-watch']
   ^-  (quip card _this)
-  `this
+  ?+    path  (on-watch:def path)
+      [%http-response *]
+    [~ this]
+  ==
 --
 |_  =bowl:gall
 ++  compute-weight
@@ -505,4 +516,21 @@ my peers attests that the ship is definitely fake (%0) the confidence goes to 0.
     ~(tap by (~(got by scores.state) ship))
   |=  [a=[@ score] b=[@ score]]
   (lth -.a -.b)
+::
+++  handle-http
+  |_  [eyre-id=@ta =inbound-request:eyre]
+  +*  req   (parse-request-line:server url.request.inbound-request)
+      body  body.request.inbound-request
+      send  (cury response:schooner eyre-id)
+      dump  [(send 404 ~ [%none ~]) state]
+      derp  [(send 500 ~ [%stock ~]) state]
+  ::
+  ++  get
+    ^-  (quip card _state)
+    [(send 404 ~ [%stock ~]) state]
+  ::
+  ++  pot
+    ^-  (quip card _state)
+    [(send 404 ~ [%stock ~]) state]
+  --
 --
