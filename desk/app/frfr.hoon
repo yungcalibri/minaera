@@ -28,7 +28,7 @@
 ::  .^((set @p) %gx /(scot %p our)/pals/(scot %da now)/mutuals/noun)
 ::
 /-  *minaera, feed, *frfr, service
-/+  verb, dbug, default-agent, schooner, *sss, n=nectar, *mip
+/+  dbug, default-agent, *mip, n=nectar, server, schooner, *sss, verb, view=frfr-view
 |%
 ::
 +$  versioned-state  $%(state-0)
@@ -527,10 +527,16 @@ my peers attests that the ship is definitely fake (%0) the confidence goes to 0.
   ::
   ++  get
     ^-  (quip card _state)
-    [(send 404 ~ [%stock ~]) state]
+    =/  site  site.req
+    ?+    site  dump
+    ::
+        [%apps %frfr ~]
+      :_  state
+      (send 200 ~ [%manx ~(home view state)])
+    ==
   ::
   ++  pot
     ^-  (quip card _state)
-    [(send 404 ~ [%stock ~]) state]
+    derp
   --
 --
