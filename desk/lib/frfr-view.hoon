@@ -76,68 +76,115 @@
     ;code:"%aera"
     ; .
   ==
+  ;p
+    ;code:"%frfr"
+    ; can attempt to calculate a score for any ship, based on the data
+    ; available in
+    ;code:"%alfie"
+    ; and
+    ;code:"%beer"
+    ; . A score is calculated like this:
+    ;br;
+    ;code: confidence(%beer) * (sum_me(feels) + 0.5 * sum_peers(feels))
+    ;br;
+    ; The confidence value comes from %beer, while the feels value is 
+    ; calculated by %alfie, subtracting the number of negative reacts
+    ; from the number of positive reacts it has collected.
+  ==
   ;div
-    ;h2#scores: Scores
-    ;table
-      ;caption: Latest Computed Scores
-      ;thead
-        ;tr
-          ;th(scope "col"): Ship
-          ;th(scope "col"): Score
-        ==
+    ;h2: Scores
+    ;sidebar-l(sideWidth "12rem", noStretch "")
+      ;form
+        =name       "compute"
+        =hx-post    "/apps/frfr/compute"
+        =hx-target  "#scores"
+        =hx-swap    "beforeend"
+        ;h3: Compute a Score
+        ;label(for "who"): Target Ship
+        ;input
+          =type         "text"
+          =name         "who"
+          =placeholder  "~sumwon-sumwer"
+          =required     "";
+        ;button(disabled ""): Compute
       ==
-      ;tbody
-        ;*  %+  turn
-          ~(tap by scores)
-        |=  [who=@p m=(map @ score)]
-        =/  latest-key=@
-          %+  reel
-            ~(tap by m)
-          |=  [[sap=@ =score] acc=@]
-          ?:  (gth sap acc)
-            sap
-          acc
-        =/  latest=score  (~(got by m) latest-key)
-        ^-  manx
-        ;tr
-          ;td
-            ;+  ;/  "{<who>}"
-          ==
-          ;td
-            ;+  ;/  "{(scow %rs score.latest)}"
+      ;table#scores
+        ;thead
+          ;tr
+            ;th(scope "col"): Ship
+            ;th(scope "col"): Score
           ==
         ==
+        ;tbody
+          ;*  %+  turn
+            ~(tap by scores)
+          |=  [who=@p m=(map @ score)]
+          =/  latest-key=@
+            %+  reel
+              ~(tap by m)
+            |=  [[sap=@ =score] acc=@]
+            ?:  (gth sap acc)
+              sap
+            acc
+          =/  latest=score  (~(got by m) latest-key)
+          ^-  manx
+          ;tr
+            ;td
+              ;+  ;/  "{<who>}"
+            ==
+            ;td
+              ;+  ;/  "{(scow %rs score.latest)}"
+            ==
+          ==
+        ==
+        ;caption: Latest Computed Scores
       ==
     ==
   ==
   ;div
-    ;h2#neighbors: Neighbors
-    ;table
-      ;caption: Neighbors
-      ;thead
-        ;tr
-          ;th(scope "col"): Neighbor
-          ;th(scope "col"): Controls
-        ==
+    ;h2: Neighbors
+    ;sidebar-l(sideWidth "12rem", noStretch "")
+      ;form
+        =name       "add-edge"
+        =hx-post    "/apps/frfr/add-edge"
+        =hx-target  "#neighbors"
+        =hx-swap    "beforeend"
+        ;h3: Add a Neighbor
+        ;label(for "who"): Target Ship
+        ;input
+          =type         "text"
+          =name         "who"
+          =placeholder  "~sumwon-sumwer"
+          =required     "";
+        ;button(disabled ""): Add
       ==
-      ;tbody
-        ;*  %+  turn
-          ~(tap in neighbors)
-        |=  who=@p
-        ;tr
-          ;td: {<who>}
-          ;td
-            ;form
-              ;input(type "hidden", name "who", value "{<who>}");
-              ;button
-                =disabled    ""
+      ;table#neighbors
+        ;thead
+          ;tr
+            ;th(scope "col"): Neighbor
+            ;th(scope "col"): Controls
+          ==
+        ==
+        ;tbody
+          ;*  %+  turn
+            ~(tap in neighbors)
+          |=  who=@p
+          ;tr
+            ;td: {<who>}
+            ;td
+              ;form
+                =name        "del-edge"
                 =hx-delete   "/apps/frfr/del-edge"
                 =hx-confirm  "Are you sure you want to remove {<who>} from your neighbors?"
-                ; Delete Edge
+                =hx-target   "#neighbors"
+                =hx-swap     "beforeend"
+                ;input(type "hidden", name "who", value "{<who>}");
+                ;button(disabled ""): Delete Edge
               ==
             ==
           ==
         ==
+        ;caption: Neighbors
       ==
     ==
   ==
@@ -151,6 +198,9 @@
   :root {
     --measure: 80ch;
   }
+  p code {
+    padding-inline: 1ch;
+  }
   hr, nav {
     width: 100%;
   }
@@ -158,11 +208,26 @@
     border: var(--s-4) double black;
     border-collapse: collapse;
   }
+  caption {
+    caption-side: bottom;
+    text-align: end;
+    font-style: italic;
+  }
   th, td {
     padding-block: var(--s-3);
     padding-inline: var(--s-1);
     border: 1px solid black;
     text-align: center;
+  }
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--s-2);
+    margin-block-end: 0;
+  }
+  form > :is(h1, h2, h3, h4, h5, h6):first-child {
+    margin-top: 0;
+    margin-bottom: 0;
   }
   '''
 --
