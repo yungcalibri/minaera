@@ -76,34 +76,67 @@
     ;code:"%aera"
     ; .
   ==
-  ;h2#scores: Scores
-  ;table
-    ;caption: Latest Computed Scores
-    ;thead
-      ;tr
-        ;th(scope "col"): Neighbor
-        ;th(scope "col"): Score
+  ;div
+    ;h2#scores: Scores
+    ;table
+      ;caption: Latest Computed Scores
+      ;thead
+        ;tr
+          ;th(scope "col"): Ship
+          ;th(scope "col"): Score
+        ==
+      ==
+      ;tbody
+        ;*  %+  turn
+          ~(tap by scores)
+        |=  [who=@p m=(map @ score)]
+        =/  latest-key=@
+          %+  reel
+            ~(tap by m)
+          |=  [[sap=@ =score] acc=@]
+          ?:  (gth sap acc)
+            sap
+          acc
+        =/  latest=score  (~(got by m) latest-key)
+        ^-  manx
+        ;tr
+          ;td
+            ;+  ;/  "{<who>}"
+          ==
+          ;td
+            ;+  ;/  "{(scow %rs score.latest)}"
+          ==
+        ==
       ==
     ==
-    ;tbody
-      ;*  %+  turn
-        ~(tap by scores)
-      |=  [who=@p m=(map @ score)]
-      =/  latest-key=@
-        %+  reel
-          ~(tap by m)
-        |=  [[sap=@ =score] acc=@]
-        ?:  (gth sap acc)
-          sap
-        acc
-      =/  latest=score  (~(got by m) latest-key)
-      ^-  manx
-      ;tr
-        ;td
-          ;+  ;/  "{<who>}"
+  ==
+  ;div
+    ;h2#neighbors: Neighbors
+    ;table
+      ;caption: Neighbors
+      ;thead
+        ;tr
+          ;th(scope "col"): Neighbor
+          ;th(scope "col"): Controls
         ==
-        ;td
-          ;+  ;/  "{(scow %rs score.latest)}"
+      ==
+      ;tbody
+        ;*  %+  turn
+          ~(tap in neighbors)
+        |=  who=@p
+        ;tr
+          ;td: {<who>}
+          ;td
+            ;form
+              ;input(type "hidden", name "who", value "{<who>}");
+              ;button
+                =disabled    ""
+                =hx-delete   "/apps/frfr/del-edge"
+                =hx-confirm  "Are you sure you want to remove {<who>} from your neighbors?"
+                ; Delete Edge
+              ==
+            ==
+          ==
         ==
       ==
     ==
