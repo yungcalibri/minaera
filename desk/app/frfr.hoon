@@ -48,20 +48,20 @@
 The score is: confidence(%beer)*(sum_me(feels)+0.5*sum_peers(feels))
 
 The confidence comes from %beer while the sum of feels consists of:
-the positive reacts minus the number of negative reacts collected 
-by %alfie. 
+the positive reacts minus the number of negative reacts collected
+by %alfie.
 
 If there is a first hand opinion of the person, if it is %1, then
 the confidence is 1. Likewise if it is %0, then the confidence
 is 0.
 
-If I don't have a first hand opinion, then I will poll my trusted 
-peers and take the max of their score. 
+If I don't have a first hand opinion, then I will poll my trusted
+peers and take the max of their score.
 
-If none of my peers has a first hand opinion of the ship, the confidence 
+If none of my peers has a first hand opinion of the ship, the confidence
 will be 3/4 to represent uncertainty.
 
-If none of my peers attests that the ship is real (%1) and at least one of 
+If none of my peers attests that the ship is real (%1) and at least one of
 my peers attests that the ship is definitely fake (%0) the confidence goes to 0.
 '''
 :*  desc=desc
@@ -203,36 +203,9 @@ my peers attests that the ship is definitely fake (%0) the confidence goes to 0.
     ::
       %frfr-action
     =/  act  !<(frfr-action vase)
-    ?+    -.act  !!
-        %compute
-      =/  confidence=(unit [from=@p weight=@rs])
-        (compute-weight:hc ship.act neighbors.state)
-      =/  sum  (get-sum-neighbors:hc ship.act neighbors.state)
-      ?~  sum
-        ~|('%frfr: No information on {<ship.act>} available in your graph' `this)
-      =/  con=[from=(unit @p) weight=@rs]
-        ?~  confidence 
-          [~ .0.75]
-        [`from weight]:(need confidence) 
-      :-  ~
-      %=    this
-          scores.state
-        %^    ~(put bi scores.state)
-            ship.act 
-          (unique-time now.bowl ship.act scores.state)  
-        :+  (mul:rs weight.con (calc-sum:hc (need sum)))
-          con
-        (need sum)
-      ==
-    ::
-        %add-edge
-      :-  (pass-surf our.bowl ship.act)
-      this(neighbors.state (~(put in neighbors.state) ship.act))
-    ::
-        %del-edge
-      :-  (quit-surf our.bowl ship.act)
-      this(neighbors.state (~(del in neighbors.state) ship.act))
-    ==
+    =^  cards  state
+      (handle-action act)
+    [cards this]
     ::
       %surf-feed
     =^  cards  sub-feed
@@ -295,6 +268,9 @@ my peers attests that the ship is definitely fake (%0) the confidence goes to 0.
       ::
           %'POST'
         ~(pot handle-http req)
+      ::
+          %'DELETE'
+        ~(del handle-http req)
       ==
     [cards this]
   ==
@@ -393,7 +369,7 @@ my peers attests that the ship is definitely fake (%0) the confidence goes to 0.
   =+  (grab-scores-beer host)
   ?~  -
     ~
-  =/  scores  (need -) 
+  =/  scores  (need -)
   ?.  (~(has by scores) target)
     ~
   ?:  =(%0 (~(got by scores) target))
@@ -403,13 +379,13 @@ my peers attests that the ship is definitely fake (%0) the confidence goes to 0.
 ++  grab-scores-beer
   |=  =ship
   ^-  (unit (map @p @rs))
-  =/  local-map  (~(get by +.sub-service) [ship %beer [%service %beer ~]]) 
+  =/  local-map  (~(get by +.sub-service) [ship %beer [%service %beer ~]])
   ?~  local-map
-    ~|('%frfr: subscription to %beer has not been initialized yet' ~) 
+    ~|('%frfr: subscription to %beer has not been initialized yet' ~)
   =/  flow=(unit [aeon=@ stale=_| fail=_| =rock:service])  (need local-map)
   ?~  flow
     ~
-  `rock:(need flow) 
+  `rock:(need flow)
 ::
 ++  get-sum-neighbors
   |=  [target=ship neighbors=(set @p)]
@@ -429,7 +405,7 @@ my peers attests that the ship is definitely fake (%0) the confidence goes to 0.
       tables
     *(map @p [pozz=@ud negs=@ud])
   |=  [a=[ship=@p =table:n] counts=(map @p [pozz=@ud negs=@ud])]
-  =/  pozz  
+  =/  pozz
     %-  lent
     (~(get-rows tab:n (~(select tab:n table.a) ~ (pos-cond target))) ~)
   =/  negs
@@ -444,11 +420,11 @@ my peers attests that the ship is definitely fake (%0) the confidence goes to 0.
 ++  grab-table-alfie
   |=  =ship
   ^-  (unit table:n)
-  =/  local-map  
+  =/  local-map
     %-  ~(get by +.sub-feed)
     [ship %minaera [%feed %minaera %groups %alfie ~]]
   ?~  local-map
-    ~|('%frfr: %alfie has not been initialized yet' ~) 
+    ~|('%frfr: %alfie has not been initialized yet' ~)
   =/  flow=(unit [aeon=@ stale=_| fail=_| =rock:feed])  (need local-map)
   ?~  flow
     ~
@@ -463,7 +439,7 @@ my peers attests that the ship is definitely fake (%0) the confidence goes to 0.
     |=  [=ship [pos=@ud neg=@ud]]
     %+  mul:rs
       ?:(=(our.bowl ship) .1 .0.5)
-    %+  add:rs 
+    %+  add:rs
       (mul:rs .-1.0 (sun:rs neg))
     (sun:rs pos)
   add:rs
@@ -478,11 +454,11 @@ my peers attests that the ship is definitely fake (%0) the confidence goes to 0.
 :*  %and
     [%s %tag [%& %eq %react]]
     :+  %and
-      [%s %to [%& %eq target]] 
-    :*  %s 
-        %what 
+      [%s %to [%& %eq target]]
+    :*  %s
+        %what
         :-  %|
-        |=  a=value:n 
+        |=  a=value:n
         ?<  |(?=((unit @) a) ?=(^ a))
         (~(has in neg-reacts) a)
     ==
@@ -494,11 +470,11 @@ my peers attests that the ship is definitely fake (%0) the confidence goes to 0.
 :*  %and
     [%s %tag [%& %eq %react]]
     :+  %and
-      [%s %to [%& %eq target]] 
-    :*  %s 
-        %what 
+      [%s %to [%& %eq target]]
+    :*  %s
+        %what
         :-  %|
-        |=  a=value:n 
+        |=  a=value:n
         ?<  |(?=((unit @) a) ?=(^ a))
         (~(has in pos-reacts) a)
     ==
@@ -516,6 +492,41 @@ my peers attests that the ship is definitely fake (%0) the confidence goes to 0.
     ~(tap by (~(got by scores.state) ship))
   |=  [a=[@ score] b=[@ score]]
   (lth -.a -.b)
+::
+++  handle-action
+  |=  act=frfr-action
+  ^-  (quip card _state)
+  ?+    -.act  !!
+  ::
+      %compute
+    =/  confidence=(unit [from=@p weight=@rs])
+      (compute-weight ship.act neighbors.state)
+    =/  sum  (get-sum-neighbors ship.act neighbors.state)
+    ?~  sum
+      ~|('%frfr: No information on {<ship.act>} available in your graph' `state)
+    =/  con=[from=(unit @p) weight=@rs]
+      ?~  confidence
+        [~ .0.75]
+      [`from weight]:(need confidence)
+    :-  ~
+    %=    state
+        scores
+      %^    ~(put bi scores.state)
+          ship.act
+        (unique-time now.bowl ship.act scores.state)
+      :+  (mul:rs weight.con (calc-sum (need sum)))
+        con
+      (need sum)
+    ==
+  ::
+      %add-edge
+    :-  (pass-surf our.bowl ship.act)
+    state(neighbors (~(put in neighbors.state) ship.act))
+  ::
+      %del-edge
+    :-  (quit-surf our.bowl ship.act)
+    state(neighbors (~(del in neighbors.state) ship.act))
+  ==
 ::
 ++  handle-http
   |_  [eyre-id=@ta =inbound-request:eyre]
@@ -537,6 +548,45 @@ my peers attests that the ship is definitely fake (%0) the confidence goes to 0.
   ::
   ++  pot
     ^-  (quip card _state)
-    derp
+    =/  site  site.req
+    =/  whom=(unit @t)
+      (get-header:http 'whom' `header-list:http`args.req)
+    ?~  whom  dump
+    =/  whom=(unit ship)  (mole |.(`@p`(slav %p u.whom)))
+    ?~  whom  dump
+    ?+    site  dump
+    ::
+        [%apps %frfr %compute ~]
+      =/  next  (handle-action `frfr-action`[%compute ship=u.whom])
+      :_  +.next
+      %+  weld
+        -.next
+      (send [200 ~ [%manx ~(scores view +.next)]])
+    ::
+        [%apps %frfr %add-edge ~]
+      =/  next  (handle-action `frfr-action`[%add-edge ship=u.whom])
+      :_  +.next
+      %+  weld
+        -.next
+      (send [200 ~ [%manx ~(neighbors view +.next)]])
+    ==
+  ::
+  ++  del
+    ^-  (quip card _state)
+    =/  site  site.req
+    =/  whom=(unit @t)
+      (get-header:http 'whom' `header-list:http`args.req)
+    ?~  whom  dump
+    =/  whom=(unit ship)  (mole |.(`@p`(slav %p u.whom)))
+    ?~  whom  dump
+    ?+    site  dump
+    ::
+        [%apps %frfr %del-edge ~]
+      =/  next  (handle-action `frfr-action`[%del-edge ship=u.whom])
+      :_  +.next
+      %+  weld
+        -.next
+      (send [200 ~ [%manx ~(neighbors view +.next)]])
+    ==
   --
 --

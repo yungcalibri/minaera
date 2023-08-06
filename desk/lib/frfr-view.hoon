@@ -87,108 +87,120 @@
     ;br;
     ;code: confidence(%beer) * (sum_me(feels) + 0.5 * sum_peers(feels))
     ;br;
-    ; The confidence value comes from %beer, while the feels value is 
+    ; The confidence value comes from %beer, while the feels value is
     ; calculated by %alfie, subtracting the number of negative reacts
     ; from the number of positive reacts it has collected.
   ==
   ;div
     ;h2: Scores
-    ;sidebar-l(sideWidth "12rem", noStretch "")
-      ;form
-        =name       "compute"
-        =hx-post    "/apps/frfr/compute"
-        =hx-target  "#scores"
-        =hx-swap    "beforeend"
-        ;h3: Compute a Score
-        ;label(for "who"): Target Ship
-        ;input
-          =type         "text"
-          =name         "who"
-          =placeholder  "~sumwon-sumwer"
-          =required     "";
-        ;button(disabled ""): Compute
-      ==
-      ;table#scores
-        ;thead
-          ;tr
-            ;th(scope "col"): Ship
-            ;th(scope "col"): Score
-          ==
-        ==
-        ;tbody
-          ;*  %+  turn
-            ~(tap by scores)
-          |=  [who=@p m=(map @ score)]
-          =/  latest-key=@
-            %+  reel
-              ~(tap by m)
-            |=  [[sap=@ =score] acc=@]
-            ?:  (gth sap acc)
-              sap
-            acc
-          =/  latest=score  (~(got by m) latest-key)
-          ^-  manx
-          ;tr
-            ;td
-              ;+  ;/  "{<who>}"
-            ==
-            ;td
-              ;+  ;/  "{(scow %rs score.latest)}"
-            ==
-          ==
-        ==
-        ;caption: Latest Computed Scores
-      ==
-    ==
+    ::
+    ;+  scores:.
+    ::
   ==
   ;div
     ;h2: Neighbors
-    ;sidebar-l(sideWidth "12rem", noStretch "")
-      ;form
-        =name       "add-edge"
-        =hx-post    "/apps/frfr/add-edge"
-        =hx-target  "#neighbors"
-        =hx-swap    "beforeend"
-        ;h3: Add a Neighbor
-        ;label(for "who"): Target Ship
-        ;input
-          =type         "text"
-          =name         "who"
-          =placeholder  "~sumwon-sumwer"
-          =required     "";
-        ;button(disabled ""): Add
+    ::
+    ;+  neighbors:.
+    ::
+  ==
+  ::  end content
+  ==
+::
+++  scores
+  ^-  manx
+  ;sidebar-l(sideWidth "12rem", noStretch "")
+    ;form
+      =name       "compute"
+      =hx-post    "/apps/frfr/compute"
+      =hx-target  "#scores"
+      =hx-swap    "beforeend"
+      ;h3: Compute a Score
+      ;label(for "whom"): Target Ship
+      ;input
+        =type         "text"
+        =name         "whom"
+        =placeholder  "~sumwon-sumwer"
+        =required     "";
+      ;button: Compute
+    ==
+    ;table#scores
+      ;thead
+        ;tr
+          ;th(scope "col"): Ship
+          ;th(scope "col"): Score
+        ==
       ==
-      ;table#neighbors
-        ;thead
-          ;tr
-            ;th(scope "col"): Neighbor
-            ;th(scope "col"): Controls
+      ;tbody
+        ;*  %+  turn
+          ~(tap by ^scores)
+        |=  [whom=@p m=(map @ score)]
+        =/  latest-key=@
+          %+  reel
+            ~(tap by m)
+          |=  [[sap=@ =score] acc=@]
+          ?:  (gth sap acc)
+            sap
+          acc
+        =/  latest=score  (~(got by m) latest-key)
+        ^-  manx
+        ;tr
+          ;td
+            ;+  ;/  "{<whom>}"
+          ==
+          ;td
+            ;+  ;/  "{(scow %rs score.latest)}"
           ==
         ==
-        ;tbody
-          ;*  %+  turn
-            ~(tap in neighbors)
-          |=  who=@p
-          ;tr
-            ;td: {<who>}
-            ;td
-              ;form
-                =name        "del-edge"
-                =hx-delete   "/apps/frfr/del-edge"
-                =hx-confirm  "Are you sure you want to remove {<who>} from your neighbors?"
-                =hx-target   "#neighbors"
-                =hx-swap     "beforeend"
-                ;input(type "hidden", name "who", value "{<who>}");
-                ;button(disabled ""): Delete Edge
-              ==
+      ==
+      ;caption: Latest Computed Scores
+    ==
+  ==
+::
+++  neighbors
+  ^-  manx
+  ;sidebar-l(sideWidth "12rem", noStretch "")
+    ;form
+      =name       "add-edge"
+      =hx-post    "/apps/frfr/add-edge"
+      =hx-target  "#neighbors"
+      =hx-swap    "beforeend"
+      ;h3: Add a Neighbor
+      ;label(for "whom"): Target Ship
+      ;input
+        =type         "text"
+        =name         "whom"
+        =placeholder  "~sumwon-sumwer"
+        =required     "";
+      ;button: Add
+    ==
+    ;table#neighbors
+      ;thead
+        ;tr
+          ;th(scope "col"): Neighbor
+          ;th(scope "col"): Controls
+        ==
+      ==
+      ;tbody
+        ;*  %+  turn
+          ~(tap in ^neighbors)
+        |=  whom=@p
+        ;tr
+          ;td: {<whom>}
+          ;td
+            ;form
+              =name        "del-edge"
+              =hx-delete   "/apps/frfr/del-edge"
+              =hx-confirm  "Are you sure you want to remove {<whom>} from your neighbors?"
+              =hx-target   "#neighbors"
+              =hx-swap     "beforeend"
+              ;input(type "hidden", name "whom", value "{<whom>}");
+              ;button: Delete Edge
             ==
           ==
         ==
-        ;caption: Neighbors
       ==
+      ;caption: Neighbors
     ==
-  ==
-  ::  end content
   ==
 ::
 ++  style
