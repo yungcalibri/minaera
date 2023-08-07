@@ -531,10 +531,29 @@ my peers attests that the ship is definitely fake (%0) the confidence goes to 0.
 ++  handle-http
   |_  [eyre-id=@ta =inbound-request:eyre]
   +*  req   (parse-request-line:server url.request.inbound-request)
-      body  body.request.inbound-request
       send  (cury response:schooner eyre-id)
       dump  [(send 404 ~ [%none ~]) state]
       derp  [(send 500 ~ [%stock ~]) state]
+  ::
+  ++  get-form-value
+    |=  tgt=@t
+    ^-  (unit @t)
+    =/  body=(unit (list [key=@t value=@t]))
+      ?~  body.request.inbound-request  ~
+      (rush q.u.body.request.inbound-request yquy:de-purl:html)
+    ?~  body  ~
+    =/  vals=(list [key=@t value=@t])  u.body
+    |-
+    ?~  vals  ~
+    ?:  =(key.i.vals tgt)
+      [~ value.i.vals]
+    $(vals t.vals)
+  ::
+  ++  whom
+    ^-  (unit ship)
+    =/  got  (get-form-value 'whom')
+    ?~  got  ~
+    (slaw %p u.got)
   ::
   ++  get
     ^-  (quip card _state)
@@ -548,12 +567,9 @@ my peers attests that the ship is definitely fake (%0) the confidence goes to 0.
   ::
   ++  pot
     ^-  (quip card _state)
+    =/  whom  whom..
+    ?~  whom  derp
     =/  site  site.req
-    =/  whom=(unit @t)
-      (get-header:http 'whom' `header-list:http`args.req)
-    ?~  whom  dump
-    =/  whom=(unit ship)  (mole |.(`@p`(slav %p u.whom)))
-    ?~  whom  dump
     ?+    site  dump
     ::
         [%apps %frfr %compute ~]
@@ -573,12 +589,9 @@ my peers attests that the ship is definitely fake (%0) the confidence goes to 0.
   ::
   ++  del
     ^-  (quip card _state)
+    =/  whom  whom..
+    ?~  whom  dump
     =/  site  site.req
-    =/  whom=(unit @t)
-      (get-header:http 'whom' `header-list:http`args.req)
-    ?~  whom  dump
-    =/  whom=(unit ship)  (mole |.(`@p`(slav %p u.whom)))
-    ?~  whom  dump
     ?+    site  dump
     ::
         [%apps %frfr %del-edge ~]

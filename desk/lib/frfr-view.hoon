@@ -31,7 +31,7 @@
       ;script:"htmx.logAll();"
       ;style: {style}
     ==
-    ;body(hx-ext "json-enc,include-vals")
+    ;body(hx-boost "true", hx-ext "include-vals")
     ::
     ;*  kid
     ::
@@ -108,12 +108,11 @@
 ::
 ++  scores
   ^-  manx
-  ;sidebar-l(sideWidth "12rem", noStretch "")
+  ;sidebar-l#scores(sideWidth "12rem", noStretch "")
     ;form
       =name       "compute"
       =hx-post    "/apps/frfr/compute"
       =hx-target  "#scores"
-      =hx-swap    "beforeend"
       ;h3: Compute a Score
       ;label(for "whom"): Target Ship
       ;input
@@ -123,7 +122,7 @@
         =required     "";
       ;button: Compute
     ==
-    ;table#scores
+    ;table
       ;thead
         ;tr
           ;th(scope "col"): Ship
@@ -158,12 +157,11 @@
 ::
 ++  neighbors
   ^-  manx
-  ;sidebar-l(sideWidth "12rem", noStretch "")
+  ;sidebar-l#neighbors(sideWidth "12rem", noStretch "")
     ;form
       =name       "add-edge"
       =hx-post    "/apps/frfr/add-edge"
       =hx-target  "#neighbors"
-      =hx-swap    "beforeend"
       ;h3: Add a Neighbor
       ;label(for "whom"): Target Ship
       ;input
@@ -173,7 +171,7 @@
         =required     "";
       ;button: Add
     ==
-    ;table#neighbors
+    ;table
       ;thead
         ;tr
           ;th(scope "col"): Neighbor
@@ -192,7 +190,6 @@
               =hx-delete   "/apps/frfr/del-edge"
               =hx-confirm  "Are you sure you want to remove {<whom>} from your neighbors?"
               =hx-target   "#neighbors"
-              =hx-swap     "beforeend"
               ;input(type "hidden", name "whom", value "{<whom>}");
               ;button: Delete Edge
             ==
