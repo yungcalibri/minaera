@@ -51,7 +51,7 @@
     ;stack-l(space "var(--s2)")
       ;div
         ;center-l(intrinsic "")
-          ;h1:"%frfr"
+          ;h1(style "font-style: italic;"): MINAERA
         ==
         ;nav
           ;cluster-l(justify "end")
@@ -74,28 +74,28 @@
   %-  page
   ;*  ;=
   ::  begin content
-  ;p
-    ; This is
-    ;code:"%frfr"
-    ; , the first aggregator for
-    ;code:"%aera"
-    ; .
-  ==
-  ;p
-    ;code:"%frfr"
-    ; can attempt to calculate a score for any ship, based on the data
-    ; available in
-    ;code:"%alfie"
-    ; and
-    ;code:"%beer"
-    ; . A score is calculated like this:
-    ;br;
-    ;code: confidence(%beer) * (sum_me(feels) + 0.5 * sum_peers(feels))
-    ;br;
-    ; The confidence value comes from %beer, while the feels value is
-    ; calculated by %alfie, subtracting the number of negative reacts
-    ; from the number of positive reacts it has collected.
-  ==
+  :: ;p
+  ::   ; This is
+  ::   ;code:"%frfr"
+  ::   ; , the first aggregator for
+  ::   ;code:"%aera"
+  ::   ; .
+  :: ==
+  :: ;p
+  ::   ;code:"%frfr"
+  ::   ; can attempt to calculate a score for any ship, based on the data
+  ::   ; available in
+  ::   ;code:"%alfie"
+  ::   ; and
+  ::   ;code:"%beer"
+  ::   ; . A score is calculated like this:
+  ::   ;br;
+  ::   ;code: confidence(%beer) * (sum_me(feels) + 0.5 * sum_peers(feels))
+  ::   ;br;
+  ::   ; The confidence value comes from %beer, while the feels value is
+  ::   ; calculated by %alfie, subtracting the number of negative reacts
+  ::   ; from the number of positive reacts it has collected.
+  :: ==
   ;div
     ;h2: Scores
     ::
@@ -111,53 +111,55 @@
   ::  end content
   ==
 ::
+    :: ;form
+    ::   =name       "compute"
+    ::   =hx-post    "/apps/frfr/compute"
+    ::   =hx-target  "#scores"
+    ::   ;h3: Compute a Score
+    ::   ;label(for "whom"): Target Ship
+    ::   ;input
+    ::     =type         "text"
+    ::     =name         "whom"
+    ::     =placeholder  "~sumwon-sumwer"
+    ::     =required     "";
+    ::   ;button: Compute
+    :: ==
+::
 ++  scores
   ^-  manx
-  ;sidebar-l#scores(sideWidth "12rem", noStretch "")
-    ;form
-      =name       "compute"
-      =hx-post    "/apps/frfr/compute"
-      =hx-target  "#scores"
-      ;h3: Compute a Score
-      ;label(for "whom"): Target Ship
-      ;input
-        =type         "text"
-        =name         "whom"
-        =placeholder  "~sumwon-sumwer"
-        =required     "";
-      ;button: Compute
+  ;table
+    ;thead
+      ;tr
+        ;th(scope "col"): Ship
+        ;th(scope "col"): Score
+        ;th(scope "col"): Real?
+        ;th(scope "col"): 👍
+        ;th(scope "col"): 👎
+      ==
     ==
-    ;table
-      ;thead
-        ;tr
-          ;th(scope "col"): Ship
-          ;th(scope "col"): Score
+    ;tbody
+      ;*  %+  turn
+        ~(tap by ^scores)
+      |=  [whom=@p m=(map @ score)]
+      =/  latest-key=@
+        %+  reel
+          ~(tap by m)
+        |=  [[sap=@ =score] acc=@]
+        ?:  (gth sap acc)
+          sap
+        acc
+      =/  latest=score  (~(got by m) latest-key)
+      ^-  manx
+      ;tr
+        ;td
+          ;+  ;/  "{<whom>}"
+        ==
+        ;td
+          ;+  ;/  "{(scow %rs score.latest)}"
         ==
       ==
-      ;tbody
-        ;*  %+  turn
-          ~(tap by ^scores)
-        |=  [whom=@p m=(map @ score)]
-        =/  latest-key=@
-          %+  reel
-            ~(tap by m)
-          |=  [[sap=@ =score] acc=@]
-          ?:  (gth sap acc)
-            sap
-          acc
-        =/  latest=score  (~(got by m) latest-key)
-        ^-  manx
-        ;tr
-          ;td
-            ;+  ;/  "{<whom>}"
-          ==
-          ;td
-            ;+  ;/  "{(scow %rs score.latest)}"
-          ==
-        ==
-      ==
-      ;caption: Latest Computed Scores
     ==
+    ;caption: Latest Computed Scores
   ==
 ::
 ++  neighbors
@@ -211,11 +213,16 @@
   '''
   :root {
     --measure: 80ch;
+
+    --beige: #E8E4E2;
+    --brass: #9C918D;
+    --black: #1C221F;
   }
   body {
     font-family: Arial, sans-serif;
+    background: var(--beige);
   }
-  :is(h1, h2, h3, h4, h5, h6, pre, code) {
+  :is(h1, h2, h3, h4, h5, h6, pre, code, table) {
     font-family: "Space Mono", monospace;
   }
   p code {
@@ -225,8 +232,12 @@
     width: 100%;
   }
   table {
-    border: var(--s-4) double black;
-    border-collapse: collapse;
+    background: white;
+    border-radius: var(--s0);
+    border: 1px solid black;
+    font-weight: bold;
+    padding-inline: 1ch;
+    padding-block: 0.5ch;
   }
   caption {
     caption-side: bottom;
@@ -234,10 +245,13 @@
     font-style: italic;
   }
   th, td {
+    color: var(--brass);
     padding-block: var(--s-3);
     padding-inline: var(--s-1);
-    border: 1px solid black;
-    text-align: center;
+    text-align: end;
+  }
+  th:first-child, td:first-child {
+    text-align: start;
   }
   form {
     display: flex;
