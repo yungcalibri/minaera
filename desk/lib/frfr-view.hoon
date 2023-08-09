@@ -19,6 +19,9 @@
       ;link
         =rel   "stylesheet"
         =href  "https://unpkg.com/@yungcalibri/layout@0.1.5/dist/bundle.css";
+      ;link
+        =rel   "stylesheet"
+        =href  "https://unpkg.com/@fontsource/space-mono@5/index.css";
       ;script
         =type  "module"
         =src   "https://unpkg.com/@yungcalibri/layout@0.1.5/umd/bundle.js";
@@ -46,12 +49,14 @@
   ::  begin content
   ;center-l
     ;stack-l(space "var(--s2)")
-      ;center-l(intrinsic "")
-        ;h1:"%frfr"
-      ==
-      ;nav
-        ;cluster-l(justify "end")
-          ;a/"/": Home
+      ;div
+        ;center-l(intrinsic "")
+          ;h1:"%frfr"
+        ==
+        ;nav
+          ;cluster-l(justify "end")
+            ;a/"/": Home
+          ==
         ==
       ==
       ;stack-l
@@ -206,6 +211,12 @@
   '''
   :root {
     --measure: 80ch;
+  }
+  body {
+    font-family: Arial, sans-serif;
+  }
+  :is(h1, h2, h3, h4, h5, h6, pre, code) {
+    font-family: "Space Mono", monospace;
   }
   p code {
     padding-inline: 1ch;
