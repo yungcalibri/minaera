@@ -102,50 +102,76 @@
 ::
 ++  scores
   ^-  manx
+  =/  data=(list [whom=ship latest=score alf=[pos=@ud neg=@ud]])
+    %+  turn
+      ::  ^scores is a (mip @p @ score), cast it to +tap:by it
+      `[whom=@p m=(map @ score)]`~(tap by `(map @p (map @ score))`^scores)
+    |=  [whom=@p m=(map @ score)]
+    =/  latest=score
+      ?~  m  *score
+      =/  keys  ~(key by m)
+      ?~  keys  *score
+      %-  ~(got by m)
+      (snag 0 (sort keys gth))
+    =/  alf=[pos=@ud neg=@ud]
+      %+  reel
+        ~(val by alfie.latest)
+      |=  [v=[@ud @ud] a=[@ud @ud]]
+      [(add -.v -.a) (add +.v +.a)]
+    [whom latest alf]
+  =/  first  i.data
   ;table
-    ;thead
-      ;tr
-        ;th(scope "col"): ship
-        ;th(scope "col"): score
-        ;th(scope "col"): real?
-        ;th(scope "col"): 👍
-        ;th(scope "col"): 👎
-      ==
-    ==
     ;tbody
-      ;*  %+  turn
-        ~(tap by ^scores)
-      |=  [whom=@p m=(map @ score)]
-      =/  latest-key=@
-        %+  reel
-          ~(tap by m)
-        |=  [[sap=@ =score] acc=@]
-        ?:  (gth sap acc)
-          sap
-        acc
-      =/  latest=score  (~(got by m) latest-key)
-      =/  alf=[pos=@ud neg=@ud]
-        %+  reel
-          ~(val by alfie.latest)
-        |=  [tem=[@ud @ud] acc=[@ud @ud]]
-        [(add -.acc -.tem) (add +.acc +.tem)]
-      ^-  manx
       ;tr
-        ;td
+        ;td(headers "ship")
+          ;+  ;/  "{<whom.first>}"
+        ==
+        ;td(headers "score")
+          ;+  ;/  "{(scow %rs score.latest.first)}"
+        ==
+        ;td(headers "real")
+          ;+  ;/  "{<weight.beer.latest.first>}"
+        ==
+        ;td(headers "pos")
+          ;+  ;/  ?:  =(0 pos.alf.first)
+                    "·"
+                  "{<pos.alf.first>}"
+        ==
+        ;td(headers "neg")
+          ;+  ;/  ?:  =(0 neg.alf.first)
+                    "·"
+                  "{<neg.alf.first>}"
+        ==
+      ==
+      ;tr
+        ;td(id "ship"): ship
+        ;td(id "score"): score
+        ;td(id "real"): real?
+        ;td(id "pos"): 👍
+        ;td(id "neg"): 👎
+      ==
+      ;*
+      ^-  manx
+      ?~  t.data  *manx
+      %+  turn
+        t.data
+      |=  [whom=ship latest=score alf=[pos=@ud neg=@ud]]
+      ;tr
+        ;td(headers "ship")
           ;+  ;/  "{<whom>}"
         ==
-        ;td
+        ;td(headers "score")
           ;+  ;/  "{(scow %rs score.latest)}"
         ==
-        ;td
+        ;td(headers "real")
           ;+  ;/  "{<weight.beer.latest>}"
         ==
-        ;td
+        ;td(headers "pos")
           ;+  ;/  ?:  =(0 pos.alf)
                     "·"
                   "{<pos.alf>}"
         ==
-        ;td
+        ;td(headers "neg")
           ;+  ;/  ?:  =(0 neg.alf)
                     "·"
                   "{<neg.alf>}"
