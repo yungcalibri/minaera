@@ -21,7 +21,13 @@
         =href  "https://unpkg.com/@yungcalibri/layout@0.1.5/dist/bundle.css";
       ;link
         =rel   "stylesheet"
-        =href  "https://unpkg.com/@fontsource/space-mono@5/index.css";
+        =href  "https://unpkg.com/@fontsource/space-mono";
+      ;link
+        =rel   "stylesheet"
+        =href  "https://unpkg.com/@fontsource/space-mono/700.css";
+      ;link
+        =rel   "stylesheet"
+        =href  "https://unpkg.com/@fontsource/space-mono/700-italic.css";
       ;script
         =type  "module"
         =src   "https://unpkg.com/@yungcalibri/layout@0.1.5/umd/bundle.js";
@@ -48,22 +54,13 @@
   ;=
   ::  begin content
   ;center-l
-    ;stack-l(space "var(--s2)")
-      ;div
-        ;center-l(intrinsic "")
-          ;h1(style "font-style: italic;"): MINAERA
-        ==
-        ;nav
-          ;cluster-l(justify "end")
-            ;a/"/": Home
-          ==
-        ==
-      ==
-      ;stack-l
-      ::
-      ;*  kid
-      ::
-      ==
+    ;div
+      ;h1(style "font-style: italic;"): MINAERA
+    ==
+    ;stack-l
+    ::
+    ;*  kid
+    ::
     ==
   ==
   ::  end content
@@ -72,32 +69,10 @@
 ++  home
   ^-  manx
   %-  page
-  ;*  ;=
+  ;*
+  ;=
   ::  begin content
-  :: ;p
-  ::   ; This is
-  ::   ;code:"%frfr"
-  ::   ; , the first aggregator for
-  ::   ;code:"%aera"
-  ::   ; .
-  :: ==
-  :: ;p
-  ::   ;code:"%frfr"
-  ::   ; can attempt to calculate a score for any ship, based on the data
-  ::   ; available in
-  ::   ;code:"%alfie"
-  ::   ; and
-  ::   ;code:"%beer"
-  ::   ; . A score is calculated like this:
-  ::   ;br;
-  ::   ;code: confidence(%beer) * (sum_me(feels) + 0.5 * sum_peers(feels))
-  ::   ;br;
-  ::   ; The confidence value comes from %beer, while the feels value is
-  ::   ; calculated by %alfie, subtracting the number of negative reacts
-  ::   ; from the number of positive reacts it has collected.
-  :: ==
   ;div
-    ;h2: Scores
     ::
     ;+  scores:.
     ::
@@ -130,9 +105,9 @@
   ;table
     ;thead
       ;tr
-        ;th(scope "col"): Ship
-        ;th(scope "col"): Score
-        ;th(scope "col"): Real?
+        ;th(scope "col"): ship
+        ;th(scope "col"): score
+        ;th(scope "col"): real?
         ;th(scope "col"): 👍
         ;th(scope "col"): 👎
       ==
@@ -149,6 +124,11 @@
           sap
         acc
       =/  latest=score  (~(got by m) latest-key)
+      =/  alf=[pos=@ud neg=@ud]
+        %+  reel
+          ~(val by alfie.latest)
+        |=  [tem=[@ud @ud] acc=[@ud @ud]]
+        [(add -.acc -.tem) (add +.acc +.tem)]
       ^-  manx
       ;tr
         ;td
@@ -157,9 +137,22 @@
         ;td
           ;+  ;/  "{(scow %rs score.latest)}"
         ==
+        ;td
+          ;+  ;/  "{<weight.beer.latest>}"
+        ==
+        ;td
+          ;+  ;/  ?:  =(0 pos.alf)
+                    "·"
+                  "{<pos.alf>}"
+        ==
+        ;td
+          ;+  ;/  ?:  =(0 neg.alf)
+                    "·"
+                  "{<neg.alf>}"
+        ==
       ==
     ==
-    ;caption: Latest Computed Scores
+    ;caption: recent queries
   ==
 ::
 ++  neighbors
@@ -220,10 +213,13 @@
   }
   body {
     font-family: Arial, sans-serif;
+    font-size: 15px;
+    font-weight: 300;
     background: var(--beige);
   }
-  :is(h1, h2, h3, h4, h5, h6, pre, code, table) {
+  :is(h1, pre, code), td:first-child {
     font-family: "Space Mono", monospace;
+    font-weight: 700;
   }
   p code {
     padding-inline: 1ch;
@@ -235,7 +231,7 @@
     background: white;
     border-radius: var(--s0);
     border: 1px solid black;
-    font-weight: bold;
+    font-size: inherit;
     padding-inline: 1ch;
     padding-block: 0.5ch;
   }
@@ -243,6 +239,9 @@
     caption-side: bottom;
     text-align: end;
     font-style: italic;
+  }
+  th {
+    font-weight: bold;
   }
   th, td {
     color: var(--brass);
