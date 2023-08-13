@@ -54,8 +54,21 @@
   ;=
   ::  begin content
   ;center-l
-    ;div
+    ;div(style "display: flex; justify-content: space-between;")
       ;h1(style "font-style: italic;"): MINAERA
+      ;form
+        =name       "compute"
+        =hx-post    "/apps/frfr/compute"
+        =hx-target  "#scores"
+        =hx-swap    "outerHTML"
+        ;label(for "whom"): Target Ship
+        ;input
+          =type         "text"
+          =name         "whom"
+          =placeholder  "~sumwon-sumwer"
+          =required     "";
+        ;button: Compute
+      ==
     ==
     ;stack-l
     ::
@@ -86,23 +99,9 @@
   ::  end content
   ==
 ::
-    :: ;form
-    ::   =name       "compute"
-    ::   =hx-post    "/apps/frfr/compute"
-    ::   =hx-target  "#scores"
-    ::   ;h3: Compute a Score
-    ::   ;label(for "whom"): Target Ship
-    ::   ;input
-    ::     =type         "text"
-    ::     =name         "whom"
-    ::     =placeholder  "~sumwon-sumwer"
-    ::     =required     "";
-    ::   ;button: Compute
-    :: ==
-::
 ++  scores
   ^-  manx
-  ;table
+  ;table#scores
     ;thead
       ;tr
         ;th(scope "col"): ship
@@ -230,10 +229,10 @@
   table {
     background: white;
     border-radius: var(--s0);
-    border: 1px solid black;
     font-size: inherit;
-    padding-inline: 1ch;
-    padding-block: 0.5ch;
+  }
+  thead {
+    background: var(--beige);
   }
   caption {
     caption-side: bottom;
@@ -242,19 +241,25 @@
   }
   th {
     font-weight: bold;
+    color: white;
+  }
+  td {
+    color: var(--brass);
   }
   th, td {
-    color: var(--brass);
     padding-block: var(--s-3);
     padding-inline: var(--s-1);
     text-align: end;
+  }
+  tr:first-child > td {
+    color: var(--black);
   }
   th:first-child, td:first-child {
     text-align: start;
   }
   form {
     display: flex;
-    flex-direction: column;
+    align-items: center;
     gap: var(--s-2);
     margin-block-end: 0;
   }
