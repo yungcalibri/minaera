@@ -107,7 +107,7 @@ my peers attests that the ship is definitely fake (%0) the confidence goes to 0.
   |-
   ?.  (~(has bi m) ship unix-ms)
     unix-ms
-  $(time (add unix-ms 1))
+  $(unix-ms (add unix-ms 1))
 ::
 ++  hash-score
   |=  [=score]
