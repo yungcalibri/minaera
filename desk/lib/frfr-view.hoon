@@ -114,7 +114,7 @@
         =name       "recompute"
         =hx-post    "/apps/frfr/compute"
         =hx-target  "#scores"
-        ;input(type "hidden", value "{<whom>}");
+        ;input(type "hidden", name "whom", value "{<whom>}");
         ;button: Recompute
       ==
     ==
