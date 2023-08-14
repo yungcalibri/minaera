@@ -564,6 +564,14 @@ my peers attests that the ship is definitely fake (%0) the confidence goes to 0.
         [%apps %frfr ~]
       :_  state
       (send 200 ~ [%manx ~(home view state)])
+    ::
+        [%apps %frfr %scores ~]
+      :_  state
+      (send 200 ~ [%manx ~(scores view state)])
+    ::
+        [%apps %frfr %neighbors ~]
+      :_  state
+      (send 200 ~ [%manx ~(neighbors view state)])
     ==
   ::
   ++  pot
@@ -578,14 +586,14 @@ my peers attests that the ship is definitely fake (%0) the confidence goes to 0.
       :_  +.next
       %+  weld
         -.next
-      (send [200 ~ [%manx ~(scores view +.next)]])
+      (send [303 ~ [%redirect '/apps/frfr/scores']])
     ::
         [%apps %frfr %add-edge ~]
       =/  next  (handle-action `frfr-action`[%add-edge ship=u.whom])
       :_  +.next
       %+  weld
         -.next
-      (send [200 ~ [%manx ~(neighbors view +.next)]])
+      (send [303 ~ [%redirect '/apps/frfr/neighbors']])
     ==
   ::
   ++  del
@@ -600,7 +608,7 @@ my peers attests that the ship is definitely fake (%0) the confidence goes to 0.
       :_  +.next
       %+  weld
         -.next
-      (send [200 ~ [%manx ~(neighbors view +.next)]])
+      (send [303 ~ [%redirect '/apps/frfr/neighbors']])
     ==
   --
 --

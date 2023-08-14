@@ -160,6 +160,7 @@
     ;form
       =name       "add-edge"
       =hx-post    "/apps/frfr/add-edge"
+      =hx-swap    "outerHTML"
       =hx-target  "#neighbors"
       ;h3: Add a Neighbor
       ;label(for "whom"): Target Ship
@@ -188,6 +189,7 @@
               =name        "del-edge"
               =hx-delete   "/apps/frfr/del-edge"
               =hx-confirm  "Are you sure you want to remove {<whom>} from your neighbors?"
+              =hx-swap     "outerHTML"
               =hx-target   "#neighbors"
               ;input(type "hidden", name "whom", value "{<whom>}");
               ;button: Delete Edge
@@ -227,12 +229,15 @@
     width: 100%;
   }
   table {
-    background: white;
-    border-radius: var(--s0);
+    border-collapse: collapse;
     font-size: inherit;
   }
   thead {
     background: var(--beige);
+  }
+  tbody {
+    background: white;
+    border-radius: var(--s0);
   }
   caption {
     caption-side: bottom;
