@@ -54,22 +54,7 @@
   ;=
   ::  begin content
   ;center-l
-    ;div(style "display: flex; justify-content: space-between;")
-      ;h1(style "font-style: italic;"): MINAERA
-      ;form
-        =name       "compute"
-        =hx-post    "/apps/frfr/compute"
-        =hx-target  "#scores"
-        =hx-swap    "outerHTML"
-        ;label(for "whom"): Target Ship
-        ;input
-          =type         "text"
-          =name         "whom"
-          =placeholder  "~sumwon-sumwer"
-          =required     "";
-        ;button: Compute
-      ==
-    ==
+    ;h1(style "font-style: italic;"): MINAERA
     ;stack-l
     ::
     ;*  kid
@@ -101,76 +86,77 @@
 ::
 ++  scores
   ^-  manx
-  ;table#scores
-    ;thead
-      ;tr
-        ;th(scope "col"): ship
-        ;th(scope "col"): score
-        ;th(scope "col"): real?
-        ;th(scope "col"): 👍
-        ;th(scope "col"): 👎
-      ==
-    ==
-    ;tbody
-      ;*  %+  turn
-        ~(tap by ^scores)
-      |=  [whom=@p m=(map @ score)]
-      =/  latest-key=@
-        %+  reel
-          ~(tap by m)
-        |=  [[sap=@ =score] acc=@]
-        ?:  (gth sap acc)
-          sap
-        acc
-      =/  latest=score  (~(got by m) latest-key)
-      =/  alf=[pos=@ud neg=@ud]
-        %+  reel
-          ~(val by alfie.latest)
-        |=  [tem=[@ud @ud] acc=[@ud @ud]]
-        [(add -.acc -.tem) (add +.acc +.tem)]
-      ^-  manx
-      ;tr
-        ;td
-          ;+  ;/  "{<whom>}"
-        ==
-        ;td
-          ;+  ;/  "{(scow %rs score.latest)}"
-        ==
-        ;td
-          ;+  ;/  "{<weight.beer.latest>}"
-        ==
-        ;td
-          ;+  ;/  ?:  =(0 pos.alf)
-                    "·"
-                  "{<pos.alf>}"
-        ==
-        ;td
-          ;+  ;/  ?:  =(0 neg.alf)
-                    "·"
-                  "{<neg.alf>}"
+  ;sidebar-l#scores(side "right")
+    ;table
+      ;thead
+        ;tr
+          ;th(scope "col"): ship
+          ;th(scope "col"): score
+          ;th(scope "col"): real?
+          ;th(scope "col"): 👍
+          ;th(scope "col"): 👎
         ==
       ==
+      ;tbody
+        ;*  %+  turn
+          ~(tap by ^scores)
+        |=  [whom=@p m=(map @ score)]
+        =/  latest-key=@
+          %+  reel
+            ~(tap by m)
+          |=  [[sap=@ =score] acc=@]
+          ?:  (gth sap acc)
+            sap
+          acc
+        =/  latest=score  (~(got by m) latest-key)
+        =/  alf=[pos=@ud neg=@ud]
+          %+  reel
+            ~(val by alfie.latest)
+          |=  [tem=[@ud @ud] acc=[@ud @ud]]
+          [(add -.acc -.tem) (add +.acc +.tem)]
+        ^-  manx
+        ;tr
+          ;td
+            ;+  ;/  "{<whom>}"
+          ==
+          ;td
+            ;+  ;/  "{(scow %rs score.latest)}"
+          ==
+          ;td
+            ;+  ;/  "{<weight.beer.latest>}"
+          ==
+          ;td
+            ;+  ;/  ?:  =(0 pos.alf)
+                      "·"
+                    "{<pos.alf>}"
+          ==
+          ;td
+            ;+  ;/  ?:  =(0 neg.alf)
+                      "·"
+                    "{<neg.alf>}"
+          ==
+        ==
+      ==
+      ;caption: recent queries
     ==
-    ;caption: recent queries
-  ==
-::
-++  neighbors
-  ^-  manx
-  ;sidebar-l#neighbors(sideWidth "12rem", noStretch "")
     ;form
-      =name       "add-edge"
-      =hx-post    "/apps/frfr/add-edge"
+      =name       "compute"
+      =hx-post    "/apps/frfr/compute"
+      =hx-target  "#scores"
       =hx-swap    "outerHTML"
-      =hx-target  "#neighbors"
-      ;h3: Add a Neighbor
       ;label(for "whom"): Target Ship
       ;input
         =type         "text"
         =name         "whom"
         =placeholder  "~sumwon-sumwer"
         =required     "";
-      ;button: Add
+      ;button: Compute
     ==
+  ==
+::
+++  neighbors
+  ^-  manx
+  ;sidebar-l#neighbors(side "right")
     ;table
       ;thead
         ;tr
@@ -198,6 +184,20 @@
         ==
       ==
       ;caption: Neighbors
+    ==
+    ;form
+      =name       "add-edge"
+      =hx-post    "/apps/frfr/add-edge"
+      =hx-swap    "outerHTML"
+      =hx-target  "#neighbors"
+      ;h3: Add a Neighbor
+      ;label(for "whom"): Target Ship
+      ;input
+        =type         "text"
+        =name         "whom"
+        =placeholder  "~sumwon-sumwer"
+        =required     "";
+      ;button: Add
     ==
   ==
 ::
@@ -264,7 +264,8 @@
   }
   form {
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    align-items: end;
     gap: var(--s-2);
     margin-block-end: 0;
   }
