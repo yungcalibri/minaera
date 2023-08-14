@@ -1,5 +1,5 @@
 /-  *frfr
-/+  *mip
+/+  *mip, icons=frfr-icons
 |_  [%0 neighbors=(set @p) scores=(mip @p @ score)]
 ::
 ++  page
@@ -54,7 +54,12 @@
   ;=
   ::  begin content
   ;center-l
-    ;h1(style "font-style: italic;"): MINAERA
+    ;header
+      ;+  aera.icons
+      ;div
+        ;h1(style "font-style: italic;"): MINAERA
+      ==
+    ==
     ;stack-l
     ::
     ;*  kid
@@ -141,8 +146,12 @@
           ;th(scope "col"): ship
           ;th(scope "col"): score
           ;th(scope "col"): real?
-          ;th(scope "col"): 👍
-          ;th(scope "col"): 👎
+          ;th(scope "col")
+            ;+  thumbs-up.icons
+          ==
+          ;th(scope "col")
+            ;+  thumbs-down.icons
+          ==
         ==
       ==
       ;tbody
@@ -239,6 +248,23 @@
     font-size: 15px;
     font-weight: 300;
     background: var(--beige);
+  }
+  header {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-block-end: var(--s3);
+  }
+  header > div {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
   }
   :is(h1, pre, code), td:first-child {
     font-family: "Space Mono", monospace;
