@@ -573,21 +573,25 @@ my peers attests that the ship is definitely fake (%0) the confidence goes to 0.
     ::
         [%apps %frfr %scores ~]
       :_  state
-      (send 200 ~ [%manx ~(scores view state)])
+      (send 200 ~ [%manx (~(scores view state))])
     ::
         [%apps %frfr %neighbors ~]
       :_  state
-      (send 200 ~ [%manx ~(neighbors view state)])
+      (send 200 ~ [%manx (~(neighbors view state))])
     ==
   ::
   ++  pot
     ^-  (quip card _state)
     =/  whom  whom..
+    =/  error  "{<whom-raw>} is not a valid @p"
     =/  site  site.req
     ?+    site  dump
     ::
         [%apps %frfr %compute ~]
-      ?~  whom  derp
+      ?~  whom
+        :_  state
+        (send [200 ~ [%manx (~(scores view state) error)]])
+      ::
       =/  next  (handle-action `frfr-action`[%compute ship=u.whom])
       :_  +.next
       %+  weld
@@ -595,7 +599,10 @@ my peers attests that the ship is definitely fake (%0) the confidence goes to 0.
       (send [303 ~ [%redirect '/apps/frfr/scores']])
     ::
         [%apps %frfr %add-edge ~]
-      ?~  whom  derp
+      ?~  whom
+        :_  state
+        (send [200 ~ [%manx (~(neighbors view state) error)]])
+      ::
       =/  next  (handle-action `frfr-action`[%add-edge ship=u.whom])
       :_  +.next
       %+  weld
@@ -607,7 +614,7 @@ my peers attests that the ship is definitely fake (%0) the confidence goes to 0.
         [%apps %frfr %validate ~]
       :_  state
       ?~  whom
-        (send [200 ~ [%plain "{<whom-raw>} is not a valid @p"]])
+        (send [200 ~ [%plain error]])
       (send [200 ~ [%none ~]])
 
     ==
@@ -615,11 +622,15 @@ my peers attests that the ship is definitely fake (%0) the confidence goes to 0.
   ++  del
     ^-  (quip card _state)
     =/  whom  whom..
-    ?~  whom  dump
+    =/  error  "{<whom-raw>} is not a valid @p"
     =/  site  site.req
     ?+    site  dump
     ::
         [%apps %frfr %del-edge ~]
+      ?~  whom
+        :_  state
+        (send [200 ~ [%manx (~(neighbors view state) error)]])
+      ::
       =/  next  (handle-action `frfr-action`[%del-edge ship=u.whom])
       :_  +.next
       %+  weld

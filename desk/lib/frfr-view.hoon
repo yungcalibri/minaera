@@ -72,13 +72,13 @@
   ::  begin content
   ;div
     ::
-    ;+  scores:.
+    ;+  (scores:.)
     ::
   ==
   ;div
     ;h2: Neighbors
     ::
-    ;+  neighbors:.
+    ;+  (neighbors:.)
     ::
   ==
   ::  end content
@@ -132,6 +132,7 @@
   ==
 ::
 ++  scores
+  |=  error=_""
   ^-  manx
   ;sidebar-l#scores(side "right", sideWidth "9rem")
     ;table
@@ -165,12 +166,13 @@
         =hx-swap      "innerHTML"
         =hx-trigger   "change, keyup delay:200ms"
         =required     "";
-      ;div.error;
+      ;div.error:"{error}"
       ;button: Compute
     ==
   ==
 ::
 ++  neighbors
+  |=  error=_""
   ^-  manx
   ;sidebar-l#neighbors(side "right", sideWidth "9rem")
     ;table
@@ -216,7 +218,7 @@
         =hx-swap      "innerHTML"
         =hx-trigger   "change, keyup delay:200ms"
         =required     "";
-        ;div.error;
+        ;div.error:"{error}"
       ;button: Add
     ==
   ==
