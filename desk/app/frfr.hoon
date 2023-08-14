@@ -550,6 +550,12 @@ my peers attests that the ship is definitely fake (%0) the confidence goes to 0.
       [~ value.i.vals]
     $(vals t.vals)
   ::
+  ++  whom-raw
+    ^-  @t
+    =/  got  (get-form-value 'whom')
+    ?~  got  *@t
+    u.got
+  ::
   ++  whom
     ^-  (unit ship)
     =/  got  (get-form-value 'whom')
@@ -577,11 +583,11 @@ my peers attests that the ship is definitely fake (%0) the confidence goes to 0.
   ++  pot
     ^-  (quip card _state)
     =/  whom  whom..
-    ?~  whom  derp
     =/  site  site.req
     ?+    site  dump
     ::
         [%apps %frfr %compute ~]
+      ?~  whom  derp
       =/  next  (handle-action `frfr-action`[%compute ship=u.whom])
       :_  +.next
       %+  weld
@@ -589,11 +595,21 @@ my peers attests that the ship is definitely fake (%0) the confidence goes to 0.
       (send [303 ~ [%redirect '/apps/frfr/scores']])
     ::
         [%apps %frfr %add-edge ~]
+      ?~  whom  derp
       =/  next  (handle-action `frfr-action`[%add-edge ship=u.whom])
       :_  +.next
       %+  weld
         -.next
       (send [303 ~ [%redirect '/apps/frfr/neighbors']])
+    ::
+    ::  Validate the patp post param is actually a valid patp,
+    ::  give back an error message if not
+        [%apps %frfr %validate ~]
+      :_  state
+      ?~  whom
+        (send [200 ~ [%plain "{<whom-raw>} is not a valid @p"]])
+      (send [200 ~ [%none ~]])
+
     ==
   ::
   ++  del

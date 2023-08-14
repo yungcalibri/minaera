@@ -84,9 +84,56 @@
   ::  end content
   ==
 ::
+++  score-row
+  |=  [whom=@p m=(map @ score)]
+  ^-  manx
+  =/  latest-key=@
+    %+  reel
+      ~(tap by m)
+    |=  [[sap=@ =score] acc=@]
+    ?:  (gth sap acc)
+      sap
+    acc
+  =/  latest=score  (~(got by m) latest-key)
+  =/  alf=[pos=@ud neg=@ud]
+    %+  reel
+      ~(val by alfie.latest)
+    |=  [tem=[@ud @ud] acc=[@ud @ud]]
+    [(add -.acc -.tem) (add +.acc +.tem)]
+  ::
+  ;tr
+    ;td
+      ;+  ;/  "{<whom>}"
+      ;form
+        =class      "inline"
+        =name       "recompute"
+        =hx-post    "/apps/frfr/compute"
+        =hx-target  "#scores"
+        ;input(type "hidden", value "{<whom>}");
+        ;button: Recompute
+      ==
+    ==
+    ;td
+      ;+  ;/  "{(scow %rs score.latest)}"
+    ==
+    ;td
+      ;+  ;/  "{<weight.beer.latest>}"
+    ==
+    ;td
+      ;+  ;/  ?:  =(0 pos.alf)
+                "·"
+              "{<pos.alf>}"
+    ==
+    ;td
+      ;+  ;/  ?:  =(0 neg.alf)
+                "·"
+              "{<neg.alf>}"
+    ==
+  ==
+::
 ++  scores
   ^-  manx
-  ;sidebar-l#scores(side "right")
+  ;sidebar-l#scores(side "right", sideWidth "9rem")
     ;table
       ;thead
         ;tr
@@ -100,42 +147,7 @@
       ;tbody
         ;*  %+  turn
           ~(tap by ^scores)
-        |=  [whom=@p m=(map @ score)]
-        =/  latest-key=@
-          %+  reel
-            ~(tap by m)
-          |=  [[sap=@ =score] acc=@]
-          ?:  (gth sap acc)
-            sap
-          acc
-        =/  latest=score  (~(got by m) latest-key)
-        =/  alf=[pos=@ud neg=@ud]
-          %+  reel
-            ~(val by alfie.latest)
-          |=  [tem=[@ud @ud] acc=[@ud @ud]]
-          [(add -.acc -.tem) (add +.acc +.tem)]
-        ^-  manx
-        ;tr
-          ;td
-            ;+  ;/  "{<whom>}"
-          ==
-          ;td
-            ;+  ;/  "{(scow %rs score.latest)}"
-          ==
-          ;td
-            ;+  ;/  "{<weight.beer.latest>}"
-          ==
-          ;td
-            ;+  ;/  ?:  =(0 pos.alf)
-                      "·"
-                    "{<pos.alf>}"
-          ==
-          ;td
-            ;+  ;/  ?:  =(0 neg.alf)
-                      "·"
-                    "{<neg.alf>}"
-          ==
-        ==
+        score-row
       ==
       ;caption: recent queries
     ==
@@ -146,17 +158,21 @@
       =hx-swap    "outerHTML"
       ;label(for "whom"): Target Ship
       ;input
-        =type         "text"
         =name         "whom"
         =placeholder  "~sumwon-sumwer"
+        =hx-post      "/apps/frfr/validate"
+        =hx-target    "next .error"
+        =hx-swap      "innerHTML"
+        =hx-trigger   "change, keyup delay:200ms"
         =required     "";
+      ;div.error;
       ;button: Compute
     ==
   ==
 ::
 ++  neighbors
   ^-  manx
-  ;sidebar-l#neighbors(side "right")
+  ;sidebar-l#neighbors(side "right", sideWidth "9rem")
     ;table
       ;thead
         ;tr
@@ -193,10 +209,14 @@
       ;h3: Add a Neighbor
       ;label(for "whom"): Target Ship
       ;input
-        =type         "text"
         =name         "whom"
         =placeholder  "~sumwon-sumwer"
+        =hx-post      "/apps/frfr/validate"
+        =hx-target    "next .error"
+        =hx-swap      "innerHTML"
+        =hx-trigger   "change, keyup delay:200ms"
         =required     "";
+        ;div.error;
       ;button: Add
     ==
   ==
@@ -269,9 +289,16 @@
     gap: var(--s-2);
     margin-block-end: 0;
   }
+  form.inline {
+    align-items: flex-start;
+  }
   form > :is(h1, h2, h3, h4, h5, h6):first-child {
     margin-top: 0;
     margin-bottom: 0;
+  }
+  form .error {
+    color: red;
+    max-width: 100%;
   }
   '''
 --
