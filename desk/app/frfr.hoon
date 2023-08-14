@@ -205,7 +205,7 @@ my peers attests that the ship is definitely fake (%0) the confidence goes to 0.
       %frfr-action
     =/  act  !<(frfr-action vase)
     =^  cards  state
-      (handle-action act)
+      (handle-action:hc act)
     [cards this]
     ::
       %surf-feed
@@ -265,13 +265,13 @@ my peers attests that the ship is definitely fake (%0) the confidence goes to 0.
       ?+    method.request.inbound-request.req  dump
       ::
           %'GET'
-        ~(get handle-http req)
+        ~(get handle-http:hc req)
       ::
           %'POST'
-        ~(pot handle-http req)
+        ~(pot handle-http:hc req)
       ::
           %'DELETE'
-        ~(del handle-http req)
+        ~(del handle-http:hc req)
       ==
     [cards this]
   ==
@@ -522,6 +522,7 @@ my peers attests that the ship is definitely fake (%0) the confidence goes to 0.
   ::
       %add-edge
     :-  (pass-surf our.bowl ship.act)
+    ~&  >  (pass-surf our.bowl ship.act)
     state(neighbors (~(put in neighbors.state) ship.act))
   ::
       %del-edge
