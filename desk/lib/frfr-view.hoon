@@ -160,7 +160,7 @@
 ++  scores
   |=  error=_""
   ^-  manx
-  ;sidebar-l#scores(side "right", sideWidth "9rem")
+  ;sidebar-l#scores(side "right", sideWidth "9rem", noStretch "")
     ;table
       ;thead
         ;tr
