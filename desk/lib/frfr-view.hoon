@@ -99,6 +99,7 @@
   ;=
   ::  begin content
   ;div
+    ;h2: Scores
     ::
     ;+  (scores:.)
     ::
@@ -124,13 +125,13 @@
   ;tr
     ;td
       ;form
-        =style      "display: inline-flex;"
+        =style      "display: inline-flex; justify-content: flex-end;"
         =name       "recompute"
         =hx-post    "/apps/frfr/compute"
         =hx-target  "#scores"
         ;input(type "hidden", name "whom", value "{<whom>}");
         ;button.refresh
-          ;+  (refresh.icons 14 14)
+          ;+  (refresh.icons 16 16)
         ==
       ==
       ;+  ;/  " {<whom>}"
@@ -198,7 +199,7 @@
         =required     "";
       ;div.error:"{error}"
       ;button
-        ;+  aera-icon.icons
+        ;+  (aera-icon.icons)
       ==
     ==
   ==
@@ -228,7 +229,7 @@
               =hx-swap     "outerHTML"
               =hx-target   "#neighbors"
               ;input(type "hidden", name "whom", value "{<whom>}");
-              ;button.barely
+              ;button
                 ;div(style "transform: rotate(-45deg);")
                   ;+  (plus.icons 16 16)
                 ==
@@ -255,7 +256,7 @@
         =required     "";
         ;div.error:"{error}"
       ;button
-        ;+  (plus.icons)
+        ;+  (plus.icons 25 25)
       ==
     ==
   ==
@@ -270,6 +271,7 @@
     --beige: #E8E4E2;
     --brass: #9C918D;
     --black: #1C221F;
+    --lavender: #D0DAF1;
   }
   body {
     font-family: Roboto, sans-serif;
@@ -334,6 +336,9 @@
     padding-inline: var(--s-1);
     text-align: end;
   }
+  tr {
+    transition: background-color 80ms ease;
+  }
   tr:first-child > td {
     color: var(--black);
   }
@@ -352,7 +357,7 @@
     margin-bottom: 0;
   }
   form .error {
-    color: red;
+    color: firebrick;
     max-width: 100%;
   }
   button {
@@ -365,24 +370,36 @@
     border-color: var(--brass);
     background-color: white;
     cursor: pointer;
+    transition: filter 80ms ease;
+  }
+  button:disabled {
+  cursor: not-allowed;
   }
   button:hover {
-
+    filter: brightness(70%);
+    transition: filter 120ms ease;
+  }
+  button:active {
+    filter: none;
   }
   table button {
     background-color: var(--beige);
+  }
+  tr:has(button:hover) {
+    background-color: var(--lavender);
+    transition: background-color 120ms ease;
   }
   button.refresh {
     padding: 0;
     max-height: 1.1lh;
     max-width: 1.1lh;
   }
-  #neighbors button {
+  table button {
     padding: 1ch;
-  }
-  button.barely {
     background-color: transparent;
     border: none;
+  }
+  #neighbors table button {
     color: peru;
   }
   '''
