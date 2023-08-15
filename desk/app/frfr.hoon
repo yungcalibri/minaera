@@ -576,7 +576,7 @@ my peers attests that the ship is definitely fake (%0) the confidence goes to 0.
   ++  pot
     ^-  (quip card _state)
     =/  whom  whom..
-    =/  error  "{<whom-raw>} is not a valid @p"
+    =/  error  ?.(=("" whom-raw) "{<whom-raw>} is not a valid @p" "")
     =/  site  site.req
     ?+    site  dump
     ::
