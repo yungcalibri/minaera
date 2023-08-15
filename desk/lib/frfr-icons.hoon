@@ -52,7 +52,7 @@
     =fill  "none"
     =xmlns  "http://www.w3.org/2000/svg"
     ;path
-      =fill  "#1F2522"
+      =fill  "currentColor"
       =d  "M13.976 8.117H21.468V13.534H13.976V22.001H8.26898V13.534H0.755981V8.117H8.26898V0.00201416H13.976V8.117Z";
   ==
 ::

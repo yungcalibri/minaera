@@ -2,6 +2,23 @@
 /+  *mip, icons=frfr-icons
 |_  [%0 neighbors=(set @p) scores=(mip @p @ score)]
 ::
+++  ordered-scores
+  ^-  (list [@p score @])
+  %+  sort
+    %+  turn
+      ~(tap by ^scores)
+    |=  [whom=@p m=(map @ score)]
+    =/  latest-key=@
+      %+  reel
+        ~(tap by m)
+      |=  [[dat=@ =score] acc=@]
+      ?:  (gth dat acc)
+        dat
+      acc
+    [whom (~(got by m) latest-key) latest-key]
+  |=  [[* * a=@] [* * b=@]]
+  (gth a b)
+::
 ++  page
   |=  kid=marl
   ^-  manx
@@ -96,16 +113,8 @@
   ==
 ::
 ++  score-row
-  |=  [whom=@p m=(map @ score)]
+  |=  [whom=@p latest=score *]
   ^-  manx
-  =/  latest-key=@
-    %+  reel
-      ~(tap by m)
-    |=  [[sap=@ =score] acc=@]
-    ?:  (gth sap acc)
-      sap
-    acc
-  =/  latest=score  (~(got by m) latest-key)
   =/  alf=[pos=@ud neg=@ud]
     %+  reel
       ~(val by alfie.latest)
@@ -120,7 +129,7 @@
         =hx-post    "/apps/frfr/compute"
         =hx-target  "#scores"
         ;input(type "hidden", name "whom", value "{<whom>}");
-        ;button
+        ;button.refresh
           ;+  (refresh.icons 14 14)
         ==
       ==
@@ -168,8 +177,8 @@
       ==
       ;tbody
         ;*  %+  turn
-          ~(tap by ^scores)
-        score-row
+              ordered-scores
+            score-row
       ==
       ;caption: recent queries
     ==
@@ -178,7 +187,7 @@
       =hx-post    "/apps/frfr/compute"
       =hx-target  "#scores"
       =hx-swap    "outerHTML"
-      ;label(for "whom"): Target Ship
+      ;h3: Calculate
       ;input
         =name         "whom"
         =placeholder  "~sumwon-sumwer"
@@ -197,7 +206,7 @@
 ++  neighbors
   |=  error=_""
   ^-  manx
-  ;sidebar-l#neighbors(side "right", sideWidth "9rem")
+  ;sidebar-l#neighbors(side "right", sideWidth "9rem", noStretch "")
     ;table
       ;thead
         ;tr
@@ -219,16 +228,16 @@
               =hx-swap     "outerHTML"
               =hx-target   "#neighbors"
               ;input(type "hidden", name "whom", value "{<whom>}");
-              ;button
-                ;div(style "transform: rotate(-45deg)")
-                  ;+  (plus.icons 11 11)
+              ;button.barely
+                ;div(style "transform: rotate(-45deg);")
+                  ;+  (plus.icons 16 16)
                 ==
               ==
             ==
           ==
         ==
       ==
-      ;caption: Neighbors
+      ;caption: neighbors
     ==
     ;form
       =name       "add-edge"
@@ -236,7 +245,6 @@
       =hx-swap    "outerHTML"
       =hx-target  "#neighbors"
       ;h3: Add a Neighbor
-      ;label(for "whom"): Target Ship
       ;input
         =name         "whom"
         =placeholder  "~sumwon-sumwer"
@@ -310,6 +318,7 @@
   }
   caption {
     caption-side: bottom;
+    color: white;
     text-align: end;
     font-style: italic;
   }
@@ -362,9 +371,19 @@
   }
   table button {
     background-color: var(--beige);
+  }
+  button.refresh {
     padding: 0;
     max-height: 1.1lh;
     max-width: 1.1lh;
+  }
+  #neighbors button {
+    padding: 1ch;
+  }
+  button.barely {
+    background-color: transparent;
+    border: none;
+    color: peru;
   }
   '''
 --
