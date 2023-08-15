@@ -108,21 +108,27 @@
   ::
   ;tr
     ;td
-      ;+  ;/  "{<whom>}"
       ;form
-        =class      "inline"
+        =style      "display: inline-flex;"
         =name       "recompute"
         =hx-post    "/apps/frfr/compute"
         =hx-target  "#scores"
         ;input(type "hidden", name "whom", value "{<whom>}");
-        ;button: Recompute
+        ;button
+          ;+  (refresh.icons 14 14)
+        ==
       ==
+      ;+  ;/  " {<whom>}"
     ==
     ;td
       ;+  ;/  "{(scow %rs score.latest)}"
     ==
     ;td
-      ;+  ;/  "{<weight.beer.latest>}"
+      ;+  ;/  ?:  =(.0.75 weight.beer.latest)
+                "·"
+              ?:  =(.0 weight.beer.latest)
+                "No"
+              "Yes"
     ==
     ;td
       ;+  ;/  ?:  =(0 pos.alf)
@@ -176,7 +182,9 @@
         =hx-trigger   "change, keyup delay:200ms"
         =required     "";
       ;div.error:"{error}"
-      ;button: Compute
+      ;button
+        ;+  aera-icon.icons
+      ==
     ==
   ==
 ::
@@ -205,7 +213,11 @@
               =hx-swap     "outerHTML"
               =hx-target   "#neighbors"
               ;input(type "hidden", name "whom", value "{<whom>}");
-              ;button: Delete Edge
+              ;button
+                ;div(style "transform: rotate(-45deg)")
+                  ;+  (plus.icons 11 11)
+                ==
+              ==
             ==
           ==
         ==
@@ -228,7 +240,9 @@
         =hx-trigger   "change, keyup delay:200ms"
         =required     "";
         ;div.error:"{error}"
-      ;button: Add
+      ;button
+        ;+  (plus.icons)
+      ==
     ==
   ==
 ::
@@ -237,7 +251,7 @@
   %-  trip
   '''
   :root {
-    --measure: 80ch;
+    --measure: 85ch;
 
     --beige: #E8E4E2;
     --brass: #9C918D;
@@ -317,9 +331,6 @@
     gap: var(--s-2);
     margin-block-end: 0;
   }
-  form.inline {
-    align-items: flex-start;
-  }
   form > :is(h1, h2, h3, h4, h5, h6):first-child {
     margin-top: 0;
     margin-bottom: 0;
@@ -327,6 +338,23 @@
   form .error {
     color: red;
     max-width: 100%;
+  }
+  button {
+    padding: 0;
+    padding-inline: var(--s-4);
+    padding-block: var(--s-4);
+    border-width: 1px;
+    border-radius: var(--s-3);
+    border-style: solid;
+    border-color: var(--brass);
+    background-color: white;
+    cursor: pointer;
+  }
+  button:hover {
+
+  }
+  table button {
+    background-color: var(--beige);
   }
   '''
 --
