@@ -390,7 +390,7 @@ my peers attests that the ship is definitely fake (%0) the confidence goes to 0.
 ::
 ++  get-sum-neighbors
   |=  [target=ship neighbors=(set @p)]
-  ^-  (unit map=(map @p [pozz=@ud negs=@ud]))
+  ^-  (map @p [pozz=@ud negs=@ud])
   =/  tables=(list [@p table:n])
     %-  neede
     %+  turn
@@ -400,7 +400,6 @@ my peers attests that the ship is definitely fake (%0) the confidence goes to 0.
     ?~  -
       ~
     `[a (need -)]
-  =/  counts=(map @p [pozz=@ud negs=@ud])
   =<  +
   %^    spin
       tables
@@ -413,10 +412,6 @@ my peers attests that the ship is definitely fake (%0) the confidence goes to 0.
     %-  lent
     (~(get-rows tab:n (~(select tab:n table.a) ~ (neg-cond target))) ~)
   [a (~(put by counts) ship.a [pozz=pozz negs=negs])]
- ::
-  ?~  counts
-    ~
-  `counts
 ::
 ++  grab-table-alfie
   |=  =ship
@@ -425,7 +420,7 @@ my peers attests that the ship is definitely fake (%0) the confidence goes to 0.
     %-  ~(get by +.sub-feed)
     [ship %minaera [%feed %minaera %groups %alfie ~]]
   ?~  local-map
-    ~|('%frfr: %alfie has not been initialized yet' ~)
+    ~&('%frfr: %alfie has not been initialized yet' ~)
   =/  flow=(unit [aeon=@ stale=_| fail=_| =rock:feed])  (need local-map)
   ?~  flow
     ~
@@ -503,8 +498,6 @@ my peers attests that the ship is definitely fake (%0) the confidence goes to 0.
     =/  confidence=(unit [from=@p weight=@rs])
       (compute-weight ship.act neighbors.state)
     =/  sum  (get-sum-neighbors ship.act neighbors.state)
-    ?~  sum
-      ~|('%frfr: No information on {<ship.act>} available in your graph' `state)
     =/  con=[from=(unit @p) weight=@rs]
       ?~  confidence
         [~ .0.75]
@@ -515,14 +508,13 @@ my peers attests that the ship is definitely fake (%0) the confidence goes to 0.
       %^    ~(put bi scores.state)
           ship.act
         (unique-time now.bowl ship.act scores.state)
-      :+  (mul:rs weight.con (calc-sum (need sum)))
+      :+  (mul:rs weight.con (calc-sum sum))
         con
-      (need sum)
+      sum
     ==
   ::
       %add-edge
     :-  (pass-surf our.bowl ship.act)
-    ~&  >  (pass-surf our.bowl ship.act)
     state(neighbors (~(put in neighbors.state) ship.act))
   ::
       %del-edge
