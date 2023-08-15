@@ -77,10 +77,10 @@
   ;=
   ::  begin content
   ;center-l
-    ;header
+    ;header(style "margin-block-start: 5vh;")
       ;+  aera.icons
       ;div
-        ;h1(style "font-style: italic;"): MINAERA
+        ;h1(style "font-style: italic; font-size: 300%; letter-spacing: 5;"): MINAERA
       ==
     ==
     ;stack-l
@@ -100,7 +100,9 @@
   ::  begin content
   ;div
     ::
-    ;+  (scores:.)
+    ;+  ?~  ^neighbors
+          ;div;
+        (scores:.)
     ::
   ==
   ;div
@@ -185,6 +187,11 @@
         ==
       ==
     ==
+    ;+
+    ?:  =(0 (lent ordered-scores))
+      ;center-l(intrinsic "")
+        ;h4: Use the controls above to query your neighbors
+      ==
     ;table
       ;thead
         ;tr
@@ -217,7 +224,10 @@
         =name       "add-edge"
         =hx-post    "/apps/frfr/add-edge"
         =hx-swap    "outerHTML"
-        =hx-target  "#neighbors"
+                    ::  If we add our first neighbor, the backend will
+                    ::  redirect to the root page, and we want to
+                    ::  replace everything.
+        =hx-target  ?:(=(0 (lent ^neighbors)) "body" "#neighbors")
         ;div.error:"{error}"
         ;div.joined-input
           ;input
@@ -235,6 +245,11 @@
         ==
       ==
     ==
+    ;+
+    ?:  =(0 (lent ^neighbors))
+      ;center-l(intrinsic "")
+        ;h4: Use the controls above to add a neighbor
+      ==
     ;table
       ;thead
         ;tr

@@ -600,7 +600,9 @@ my peers attests that the ship is definitely fake (%0) the confidence goes to 0.
       :_  +.next
       %+  weld
         -.next
-      (send [303 ~ [%redirect '/apps/frfr/neighbors']])
+      ::  if this is the first neighbor we add, we want to redirect to
+      ::  the root
+      (send [303 ~ [%redirect ?:(=(0 (lent neighbors.state)) '/apps/frfr' '/apps/frfr/neighbors')]])
     ::
     ::  Validate the patp post param is actually a valid patp,
     ::  give back an error message if not
