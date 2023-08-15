@@ -138,7 +138,7 @@
       ==
     ==
     ;td
-      ;+  ;/  "{(scow %rs score.latest)}"
+      ;+  ;/  "{(r-co:co (rlys score.latest))}"
     ==
     ;td
       ;+  ;/  ?:  =(.0.75 weight.beer.latest)
