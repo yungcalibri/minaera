@@ -99,13 +99,11 @@
   ;=
   ::  begin content
   ;div
-    ;h2: Scores
     ::
     ;+  (scores:.)
     ::
   ==
   ;div
-    ;h2: Neighbors
     ::
     ;+  (neighbors:.)
     ::
@@ -124,17 +122,18 @@
   ::
   ;tr
     ;td
-      ;form
-        =style      "display: inline-flex; justify-content: flex-end;"
-        =name       "recompute"
-        =hx-post    "/apps/frfr/compute"
-        =hx-target  "#scores"
-        ;input(type "hidden", name "whom", value "{<whom>}");
-        ;button.refresh
-          ;+  (refresh.icons 16 16)
+      ;div(style "display: flex; justify-content: start; align-items: center; gap: 1ch;")
+        ;form
+          =name       "recompute"
+          =hx-post    "/apps/frfr/compute"
+          =hx-target  "#scores"
+          ;input(type "hidden", name "whom", value "{<whom>}");
+          ;button.refresh
+            ;+  (refresh.icons 16 16)
+          ==
         ==
+        ;span:" {<whom>}"
       ==
-      ;+  ;/  " {<whom>}"
     ==
     ;td
       ;+  ;/  "{(scow %rs score.latest)}"
@@ -161,7 +160,31 @@
 ++  scores
   |=  error=_""
   ^-  manx
-  ;sidebar-l#scores(side "right", sideWidth "9rem", noStretch "")
+  ;stack-l#scores(space "var(--s-4)")
+    ;div(style "display: flex; flex-direction: row; justify-content: space-between;")
+      ;h3: recent queries
+      ;form
+        =name       "compute"
+        =hx-post    "/apps/frfr/compute"
+        =hx-target  "#scores"
+        =hx-swap    "outerHTML"
+        ;div.error:"{error}"
+        ;div.joined-input
+          ;input
+            =name         "whom"
+            =placeholder  "~sumwon-sumwer"
+            =hx-post      "/apps/frfr/validate"
+            =hx-target    "previous .error"
+            =hx-swap      "innerHTML"
+            =hx-trigger   "change, keyup delay:200ms"
+            =required     "";
+          ;b;  :: draws the line between the input and the button, see css
+          ;button
+            ;+  (aera-icon.icons)
+          ==
+        ==
+      ==
+    ==
     ;table
       ;thead
         ;tr
@@ -181,38 +204,42 @@
               ordered-scores
             score-row
       ==
-      ;caption: recent queries
-    ==
-    ;form
-      =name       "compute"
-      =hx-post    "/apps/frfr/compute"
-      =hx-target  "#scores"
-      =hx-swap    "outerHTML"
-      ;h3: Calculate
-      ;input
-        =name         "whom"
-        =placeholder  "~sumwon-sumwer"
-        =hx-post      "/apps/frfr/validate"
-        =hx-target    "next .error"
-        =hx-swap      "innerHTML"
-        =hx-trigger   "change, keyup delay:200ms"
-        =required     "";
-      ;div.error:"{error}"
-      ;button
-        ;+  (aera-icon.icons)
-      ==
     ==
   ==
 ::
 ++  neighbors
   |=  error=_""
   ^-  manx
-  ;sidebar-l#neighbors(side "right", sideWidth "9rem", noStretch "")
+  ;stack-l#neighbors(space "var(--s-4)")
+    ;div(style "display: flex; flex-direction: row; justify-content: space-between;")
+      ;h3: neighbors
+      ;form
+        =name       "add-edge"
+        =hx-post    "/apps/frfr/add-edge"
+        =hx-swap    "outerHTML"
+        =hx-target  "#neighbors"
+        ;div.error:"{error}"
+        ;div.joined-input
+          ;input
+            =name         "whom"
+            =placeholder  "~sumwon-sumwer"
+            =hx-post      "/apps/frfr/validate"
+            =hx-target    "previous .error"
+            =hx-swap      "innerHTML"
+            =hx-trigger   "change, keyup delay:200ms"
+            =required     "";
+          ;b;
+          ;button
+            ;+  (plus.icons 25 25)
+          ==
+        ==
+      ==
+    ==
     ;table
       ;thead
         ;tr
-          ;th(scope "col"): Neighbor
-          ;th(scope "col"): Controls
+          ;th(scope "col"): neighbor
+          ;th(scope "col"): controls
         ==
       ==
       ;tbody
@@ -223,40 +250,22 @@
           ;td: {<whom>}
           ;td
             ;form
+              =style       "display: flex; justify-content: end;"
               =name        "del-edge"
               =hx-delete   "/apps/frfr/del-edge"
               =hx-confirm  "Are you sure you want to remove {<whom>} from your neighbors?"
               =hx-swap     "outerHTML"
               =hx-target   "#neighbors"
               ;input(type "hidden", name "whom", value "{<whom>}");
-              ;button
-                ;div(style "transform: rotate(-45deg);")
-                  ;+  (plus.icons 16 16)
+              ;button(style "display: flex; align-items: center;")
+                ;span: Evict
+                ;div(style "display: inline-block; transform: rotate(-45deg); margin-inline-start: 1ch;")
+                  ;+  (plus.icons 15 15)
                 ==
               ==
             ==
           ==
         ==
-      ==
-      ;caption: neighbors
-    ==
-    ;form
-      =name       "add-edge"
-      =hx-post    "/apps/frfr/add-edge"
-      =hx-swap    "outerHTML"
-      =hx-target  "#neighbors"
-      ;h3: Add a Neighbor
-      ;input
-        =name         "whom"
-        =placeholder  "~sumwon-sumwer"
-        =hx-post      "/apps/frfr/validate"
-        =hx-target    "next .error"
-        =hx-swap      "innerHTML"
-        =hx-trigger   "change, keyup delay:200ms"
-        =required     "";
-        ;div.error:"{error}"
-      ;button
-        ;+  (plus.icons 25 25)
       ==
     ==
   ==
@@ -266,7 +275,7 @@
   %-  trip
   '''
   :root {
-    --measure: 85ch;
+    --measure: 75ch;
 
     --beige: #E8E4E2;
     --brass: #9C918D;
@@ -319,14 +328,16 @@
     border-radius: var(--s0);
   }
   caption {
-    caption-side: bottom;
-    color: white;
-    text-align: end;
+    caption-side: top;
+    color: var(--black);
+    text-align: start;
     font-style: italic;
+    font-size: 150%;
+    padding-block: 0.25ch;
   }
   th {
     font-weight: bold;
-    color: white;
+    color: var(--brass);
   }
   td {
     color: var(--brass);
@@ -335,6 +346,10 @@
     padding-block: var(--s-3);
     padding-inline: var(--s-1);
     text-align: end;
+  }
+  th {
+    padding-block-start: 0;
+    padding-block-end: var(--s-4);
   }
   tr {
     transition: background-color 80ms ease;
@@ -347,8 +362,8 @@
   }
   form {
     display: flex;
-    flex-direction: column;
-    align-items: end;
+    flex-direction: row;
+    align-items: center;
     gap: var(--s-2);
     margin-block-end: 0;
   }
@@ -359,6 +374,26 @@
   form .error {
     color: firebrick;
     max-width: 100%;
+  }
+  form .joined-input {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+  }
+  form .joined-input b {
+    display: block;
+    width: 2ch;
+    height: 1px;
+    background-color: var(--brass);
+    align-self: center;
+  }
+  input {
+    padding-inline: 1.5ch;
+    padding-block: 1ch;
+    border-radius: var(--s-4);
+    border-color: var(--brass);
+    border-style: solid;
+    border-width: 1px;
   }
   button {
     padding: 0;
@@ -390,9 +425,9 @@
     transition: background-color 120ms ease;
   }
   button.refresh {
-    padding: 0;
+    padding-inline: 1ch;
+    padding-block: 0.2ch;
     max-height: 1.1lh;
-    max-width: 1.1lh;
   }
   table button {
     padding: 1ch;
