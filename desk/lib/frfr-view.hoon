@@ -28,6 +28,12 @@
       ;link
         =rel   "stylesheet"
         =href  "https://unpkg.com/@fontsource/space-mono/700-italic.css";
+      ;link
+        =rel   "stylesheet"
+        =href  "https://unpkg.com/@fontsource/roboto/700.css";
+      ;link
+        =rel   "stylesheet"
+        =href  "https://unpkg.com/@fontsource/roboto/700-italic.css";
       ;script
         =type  "module"
         =src   "https://unpkg.com/@yungcalibri/layout@0.1.5/umd/bundle.js";
@@ -258,9 +264,9 @@
     --black: #1C221F;
   }
   body {
-    font-family: Arial, sans-serif;
+    font-family: Roboto, sans-serif;
     font-size: 15px;
-    font-weight: 300;
+    font-weight: 700;
     background: var(--beige);
   }
   header {
@@ -293,6 +299,7 @@
   table {
     border-collapse: collapse;
     font-size: inherit;
+    vertical-align: middle;
   }
   thead {
     background: var(--beige);
@@ -355,6 +362,9 @@
   }
   table button {
     background-color: var(--beige);
+    padding: 0;
+    max-height: 1.1lh;
+    max-width: 1.1lh;
   }
   '''
 --
