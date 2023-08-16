@@ -110,6 +110,11 @@
     ;+  (neighbors:.)
     ::
   ==
+  ;div#beer  ::  swaps in content from /apps/beer/main, see /lib/beer-view.hoon
+    =hx-get      "/apps/beer/main"
+    =hx-trigger  "load delay:10ms"
+    =hx-target   "#beer"
+    =hx-swap     "outerHTML";
   ::  end content
   ==
 ::
@@ -386,7 +391,7 @@
     margin-top: 0;
     margin-bottom: 0;
   }
-  form .error {
+  .error {
     color: firebrick;
     max-width: 100%;
   }
@@ -451,6 +456,39 @@
   }
   #neighbors table button {
     color: peru;
+  }
+  #beer .add {
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+  }
+  #beer .error {
+    margin-top: var(--s-1);
+    min-height: 1lh;
+  }
+  #beer .add form button {
+    width: 6ch;
+  }
+  #beer .toast svg {
+    --sigil-color: var(--brass);
+    --background-color: var(--beige);
+  }
+  #beer .bar {
+    margin-top: var(--s-1);
+    display: flex;
+    justify-content: space-between;
+    gap: var(--s3);
+  }
+  #beer .bar > div {
+    /* account for gap */
+    max-width: calc(50% - (var(--s3) * 0.5));
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: var(--s1);
+  }
+  #beer .bar > div:last-child {
+    flex-direction: row-reverse;
   }
   '''
 --
