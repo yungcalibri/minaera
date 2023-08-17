@@ -58,10 +58,8 @@
 ++  main
   ^-  manx
   ;div#beer
-    ;h2
-      ; The
-      ;code: %beer
-      ;+  ;/  " Bar"
+    ;h3
+      ; the %beer bar
     ==
     ;div.add
       ;form
@@ -109,13 +107,13 @@
       ==
     ;sidebar-l.bar(side "right", sideWidth "45%", contentMin "45%", space "var(--s0)")
       ;div.reals
-        ;h3: Reals
+        ;h3: reals
         ;cluster-l(space "var(--s-1)")
           ;*  (turn reals toast)
         ==
       ==
       ;div.fakes
-        ;h3(style "text-align: end"): Fakes
+        ;h3(style "text-align: end"): fakes
         ;cluster-l(space "var(--s-1)", style "flex-direction: row-reverse;")
           ;*  (turn fakes toast)
         ==
