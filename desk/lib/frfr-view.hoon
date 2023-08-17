@@ -91,6 +91,55 @@
     ;*  kid
     ::
     ==
+    ;footer
+      ;stack-l(space "var(--s-1)", style "text-align: end; align-items: end;")
+        ;div
+          ;span:"Made with "
+          ;a
+            =href    "https://htmx.org/"
+            =target  "_blank"
+            =rel     "noopener noreferrer": HTMX,
+          ;span:" "
+          ;a
+            =href    "https://developers.urbit.org/guides/additional/sail"
+            =target  "_blank"
+            =rel     "noopener noreferrer": Sail,
+          ;span:" and a lot of love."
+        ==
+        ;div
+          ;span:"Functionality by "
+          ;a
+            =href    "https://twitter.com/litlep_nibbyt"
+            =target  "_blank"
+            =rel     "noopener noreferrer": ~litlep-nibbyt.
+        ==
+        ;div
+          ;span:"Designs by "
+          ;a
+            =href    "https://ahlmark.net"
+            =target  "_blank"
+            =rel     "noopener noreferrer": ~litneb-maltyp.
+        ==
+        ;div
+          ;span:"Web UI by "
+          ;a
+            =href    "https://twitter.com/yung_calibri"
+            =target  "_blank"
+            =rel     "noopener noreferrer": ~normul-postem.
+        ==
+        ;div
+          ;span:"Nerds wrangled by "
+          ;a
+            =href    "https://twitter.com/_sarlev"
+            =target  "_blank"
+            =rel     "noopener noreferrer": ~sarlev-sarsen.
+        ==
+        ;div
+          ;span:"Feedback by you! Drop us a line at "
+          ;code: ~dalten/aera.
+        ==
+      ==
+    ==
   ==
   ::  end content
   ==
@@ -300,10 +349,11 @@
   :root {
     --measure: 75ch;
 
-    --beige: #E8E4E2;
-    --brass: #9C918D;
-    --black: #1C221F;
-    --lavender: #D0DAF1;
+    --beige: #e8e4e2;
+    --brass: #9c918d;
+    --copper: #665b5d;
+    --black: #1c221f;
+    --lavender: #d0daf1;
   }
   body {
     font-family: Roboto, sans-serif;
@@ -336,6 +386,32 @@
     flex-direction: row-reverse;
     align-items: center;
     color: var(--brass);
+  }
+  footer {
+    margin-block-start: var(--s3);
+    font-size: 80%;
+    color: var(--brass);
+    display: flex;
+    flex-direction: row-reverse;
+  }
+  footer a {
+    font-family: "Space Mono", monospace;
+  }
+  a:link {
+    color: var(--brass);
+    transition: 50ms ease;
+  }
+  a:visited {
+    color: var(--copper);
+    filter: brightness(50%);
+  }
+  :link:hover {
+    filter: brightness(140%);
+    transition: 120ms ease;
+  }
+  :link:active {
+    filter: brightness(100%);
+    transition: 50ms ease;
   }
   :is(h1, pre, code), td:first-child {
     font-family: "Space Mono", monospace;
