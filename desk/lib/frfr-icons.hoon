@@ -112,5 +112,59 @@
     =fill  "currentColor"
     =d  "M28.658 10.601C28.658 12.923 28.664 15.244 28.656 17.565C28.65 19.096 27.464 20.456 26.002 20.634C24.405 20.829 22.985 19.902 22.564 18.371C22.489 18.098 22.441 17.808 22.441 17.525C22.434 12.882 22.427 8.239 22.441 3.596C22.446 1.981 23.598 0.717009 25.201 0.489009C26.628 0.287009 28.101 1.26102 28.518 2.71002C28.611 3.03202 28.651 3.37998 28.652 3.71698C28.664 6.01198 28.658 8.30701 28.658 10.601Z";
   ==
-
+::  Animated loader. Credit @sherb, https://github.com/SamHerbert/SVG-Loaders
+++  loader
+  ^-  manx
+  ;svg
+    =width    "44"
+    =height   "44"
+    =viewBox  "0 0 44 44"
+    =xmlns    "http://www.w3.org/2000/svg"
+    =stroke   "currentColor"
+    ;g
+      =fill          "none"
+      =fill-rule     "evenodd"
+      =stroke-width  "2"
+      ;circle(cx "22", cy "22", r "1")
+        ;animate
+          =attributeName  "r"
+          =begin          "0s"
+          =dur            "1.8s"
+          =values         "1; 20"
+          =calcMode       "spline"
+          =keyTimes       "0; 1"
+          =keySplines     "0.165, 0.84, 0.44, 1"
+          =repeatCount    "indefinite";
+        ;animate
+          =attributeName  "stroke-opacity"
+          =begin          "0s"
+          =dur            "1.8s"
+          =values         "1; 0"
+          =calcMode       "spline"
+          =keyTimes       "0; 1"
+          =keySplines     "0.3, 0.61, 0.355, 1"
+          =repeatCount    "indefinite";
+      ==
+      ;circle(cx "22", cy "22", r "1")
+        ;animate
+          =attributeName  "r"
+          =begin          "-0.9s"
+          =dur            "1.8s"
+          =values         "1; 20"
+          =calcMode       "spline"
+          =keyTimes       "0; 1"
+          =keySplines     "0.165, 0.84, 0.44, 1"
+          =repeatCount    "indefinite";
+        ;animate
+          =attributeName  "stroke-opacity"
+          =begin          "-0.9s"
+          =dur            "1.8s"
+          =values         "1; 0"
+          =calcMode       "spline"
+          =keyTimes       "0; 1"
+          =keySplines     "0.3, 0.61, 0.355, 1"
+          =repeatCount    "indefinite";
+      ==
+    ==
+  ==
 --

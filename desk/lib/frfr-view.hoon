@@ -31,7 +31,7 @@
   ^-  manx
   ;html
     ;head
-      ;title:"%frfr"
+      ;title:"Minaera"
       ;meta(charset "utf-8");
       ;link
         =rel   "stylesheet"
@@ -63,7 +63,7 @@
       ;script:"htmx.logAll();"
       ;style: {style}
     ==
-    ;body(hx-boost "true", hx-ext "include-vals")
+    ;body(hx-boost "true", hx-ext "include-vals", hx-indicator "header")
     ::
     ;*  kid
     ::
@@ -79,8 +79,11 @@
   ;center-l
     ;header(style "margin-block-start: 5vh;")
       ;+  aera.icons
-      ;div
+      ;div.title
         ;h1(style "font-style: italic; font-size: 300%; letter-spacing: 5;"): MINAERA
+      ==
+      ;div.htmx-indicator
+        ;+  loader.icons
       ==
     ==
     ;stack-l
@@ -316,7 +319,7 @@
     align-items: center;
     margin-block-end: var(--s3);
   }
-  header > div {
+  header > div.title {
     position: absolute;
     width: 100%;
     height: 100%;
@@ -324,6 +327,15 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+  }
+  header > div.htmx-indicator {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    color: var(--brass);
   }
   :is(h1, pre, code), td:first-child {
     font-family: "Space Mono", monospace;
