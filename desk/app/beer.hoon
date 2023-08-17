@@ -129,7 +129,7 @@ Scale ranging from 0 to 1 inclusive
           ~(pot handle-http:hc req)
         ::
             %'DELETE'
-          ~(pot handle-http:hc req)
+          ~(del handle-http:hc req)
         ==
       [cards this]
     ==
@@ -241,13 +241,13 @@ Scale ranging from 0 to 1 inclusive
     =/  error
       ?:  =("" whom-raw)  ""
       ?~  whom  "{<whom-raw>} is not a valid @p"
-      ?.  (~(has by bar.state) u.whom)
+      ?:  (~(has by bar.state) u.whom)
         "{<u.whom>} is already in your bar!"
       ""
     =/  site  site.req
     ?+    site  dump
     ::
-        [%apps %beer %0 ~]
+        [%apps %beer %fake ~]
       ?~  whom  dump
       =/  next=(unit (quip card _state))
         %-  mole
@@ -258,7 +258,7 @@ Scale ranging from 0 to 1 inclusive
         -.u.next
       (send [303 ~ [%redirect '/apps/beer/main']])
     ::
-        [%apps %beer %1 ~]
+        [%apps %beer %real ~]
       ?~  whom  dump
       =/  next=(unit (quip card _state))
         %-  mole
@@ -278,15 +278,20 @@ Scale ranging from 0 to 1 inclusive
   ::
   ++  del
     ^-  (quip card _state)
+    ~&  beer-del+"here"
     =/  whom  whom..
+    ~&  beer-del+"{<whom>}"
     ?~  whom  dump
     =/  site  site.req
+    ~&  beer-del+site
     ?+    site  dump
     ::
         [%apps %beer %delete ~]
+      ~&  beer-del+"delete"
       =/  next=(unit (quip card _state))
         %-  mole
         |.  (handle-action `beer-action`[%del ship=u.whom])
+      ~&  beer-del+next
       ?~  next  dump
       :_  +.u.next
       %+  weld

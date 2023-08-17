@@ -204,10 +204,10 @@
           ;th(scope "col"): score
           ;th(scope "col"): real?
           ;th(scope "col")
-            ;+  thumbs-up.icons
+            ;+  (thumbs-up.icons)
           ==
           ;th(scope "col")
-            ;+  thumbs-down.icons
+            ;+  (thumbs-down.icons)
           ==
         ==
       ==
@@ -463,29 +463,40 @@
     align-items: stretch;
   }
   #beer .error {
-    margin-top: var(--s-1);
+    margin-top: var(--s-2);
+    font-size: 70%;
     min-height: 1lh;
   }
   #beer .add form button {
     width: 6ch;
   }
-  #beer .toast svg {
+  #beer .toast {
+    color: var(--brass);
     --sigil-color: var(--brass);
     --background-color: var(--beige);
   }
-  #beer .bar {
-    margin-top: var(--s-1);
-    display: flex;
-    justify-content: space-between;
-    gap: var(--s3);
-  }
-  #beer .bar > div {
-    /* account for gap */
-    max-width: calc(50% - (var(--s3) * 0.5));
+  #beer .toast form {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    gap: var(--s1);
+    row-gap: 0px;
+    justify-content: center;
+    align-items: center;
+  }
+  #beer .toast form b {
+    display: block;
+    background-color: var(--brass);
+    height: 1lh;
+    width: 1px;
+  }
+  #beer form button {
+    color: var(--brass);
+  }
+  #beer .bar {
+    margin-top: var(--s-3);
+  }
+  #beer .bar h3 {
+    margin-top: 0;
   }
   #beer .bar > div:last-child {
     flex-direction: row-reverse;
