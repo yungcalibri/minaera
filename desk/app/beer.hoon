@@ -283,21 +283,16 @@ Scale ranging from 0 to 1 inclusive
   ::
   ++  del
     ^-  [(quip card _state) beer-action]
-    ~&  beer-del+"here"
     =/  whom  whom..
-    ~&  beer-del+"{<whom>}"
     ?~  whom  dump
     =/  site  site.req
-    ~&  beer-del+site
     ?+    site  dump
     ::
         [%apps %beer %delete ~]
-      ~&  beer-del+"delete"
       =/  act  `beer-action`[%del ship=u.whom]
       =/  next=(unit (quip card _state))
         %-  mole
         |.  (handle-action act)
-      ~&  beer-del+next
       ?~  next  dump
       :_  act
       :_  +.u.next

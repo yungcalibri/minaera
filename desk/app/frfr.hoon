@@ -216,7 +216,7 @@ my peers attests that the ship is definitely fake (%0) the confidence goes to 0.
       %surf-service
     =^  cards  sub-service
       (surf:da-service !<(@p (slot 2 vase)) %beer !<([%service %beer ~] (slot 3 vase)))
-    ~&  >  "sub-service is: {<read:da-service>}"
+    :: ~&  >  "sub-service is: {<read:da-service>}"
     [cards this]
   ::
       %quit-feed
@@ -236,7 +236,7 @@ my peers attests that the ship is definitely fake (%0) the confidence goes to 0.
   ::
       %sss-service
     =/  res  !<(into:da-service (fled vase))
-    ~&  >  sss-service+res
+    :: ~&  >  sss-service+res
     =^  cards  sub-service  (apply:da-service res)
     [cards this]
   ::

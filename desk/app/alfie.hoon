@@ -102,8 +102,8 @@
         ?>  ?=([%writs *] q.q.action)
         =/  target=[to=@p post=@da]  p.p.q.q.action
         =/  =delta:writs:chat  q.p.q.q.action
-        ~&  >  target
-        ~&  >  delta
+        :: ~&  >  target
+        :: ~&  >  delta
         ?:  =(our.bowl to.target)
           `this
         ::
