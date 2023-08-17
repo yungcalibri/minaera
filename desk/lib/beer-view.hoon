@@ -79,7 +79,7 @@
           ;input
             =name         "whom"
             =placeholder  "~sumwon-sumwer"
-            =hx-post      "/apps/beer/validate"
+            =hx-post      "/apps/frfr/validate"
             =hx-target    "next .error"
             =hx-swap      "innerHTML"
             =hx-trigger   "change, keyup delay:200ms"

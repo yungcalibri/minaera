@@ -117,13 +117,17 @@ Scale ranging from 0 to 1 inclusive
       =*  dump
         :_  state
         (response:schooner eyre-id.req 404 ~ [%none ~])
-      =^  cards  state
-        ^-  (quip card _state)
-        ?.  authenticated.inbound-request.req  dump
-        ?+    method.request.inbound-request.req  dump
-        ::
-            %'GET'
+      ?.  authenticated.inbound-request.req  dump
+      ::  GET has no side effects, so we handle it separately.
+      ?:  =(%'GET' method.request.inbound-request.req)
+        =^  cards  state
           ~(get handle-http:hc req)
+        [cards this]
+      ::  These actions have side effects that must be dispatched to the
+      ::  subscription service, so we have to get back the action they
+      ::  performed.
+      =/  next=[(quip card _state) beer-action]
+        ?+    method.request.inbound-request.req  dump
         ::
             %'POST'
           ~(pot handle-http:hc req)
@@ -131,7 +135,10 @@ Scale ranging from 0 to 1 inclusive
             %'DELETE'
           ~(del handle-http:hc req)
         ==
-      [cards this]
+      =/  act  +.next
+      =^  http-cards  state  -.next
+      =^  service-cards  pub-service  (give:du-service [%service %beer ~] act)
+      [(weld http-cards service-cards) this]
     ==
   ::
   ++  on-peek
@@ -236,7 +243,7 @@ Scale ranging from 0 to 1 inclusive
     ==
   ::
   ++  pot
-    ^-  (quip card _state)
+    ^-  [(quip card _state) beer-action]
     =/  whom  whom..
     =/  error
       ?:  =("" whom-raw)  ""
@@ -249,10 +256,12 @@ Scale ranging from 0 to 1 inclusive
     ::
         [%apps %beer %fake ~]
       ?~  whom  dump
+      =/  act  `beer-action`[%add ship=u.whom %0]
       =/  next=(unit (quip card _state))
         %-  mole
-        |.  (handle-action `beer-action`[%add ship=u.whom %0])
+        |.  (handle-action act)
       ?~  next  dump
+      :_  act
       :_  +.u.next
       %+  weld
         -.u.next
@@ -260,24 +269,20 @@ Scale ranging from 0 to 1 inclusive
     ::
         [%apps %beer %real ~]
       ?~  whom  dump
+      =/  act  `beer-action`[%add ship=u.whom %1]
       =/  next=(unit (quip card _state))
         %-  mole
-        |.  (handle-action `beer-action`[%add ship=u.whom %1])
+        |.  (handle-action act)
       ?~  next  dump
+      :_  act
       :_  +.u.next
       %+  weld
         -.u.next
       (send [303 ~ [%redirect '/apps/beer/main']])
-    ::
-        [%apps %beer %validate ~]
-      :_  state
-      ?~  whom
-        (send [200 ~ [%plain error]])
-      (send [200 ~ [%none ~]])
     ==
   ::
   ++  del
-    ^-  (quip card _state)
+    ^-  [(quip card _state) beer-action]
     ~&  beer-del+"here"
     =/  whom  whom..
     ~&  beer-del+"{<whom>}"
@@ -288,11 +293,13 @@ Scale ranging from 0 to 1 inclusive
     ::
         [%apps %beer %delete ~]
       ~&  beer-del+"delete"
+      =/  act  `beer-action`[%del ship=u.whom]
       =/  next=(unit (quip card _state))
         %-  mole
-        |.  (handle-action `beer-action`[%del ship=u.whom])
+        |.  (handle-action act)
       ~&  beer-del+next
       ?~  next  dump
+      :_  act
       :_  +.u.next
       %+  weld
         -.u.next
