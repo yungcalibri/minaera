@@ -109,7 +109,7 @@
         ;div
           ;span:"Functionality by "
           ;a
-            =href    "https://twitter.com/litlep_nibbyt"
+            =href    "https://twitter.com/__meijiu"
             =target  "_blank"
             =rel     "noopener noreferrer": ~litlep-nibbyt.
         ==
@@ -130,7 +130,7 @@
         ;div
           ;span:"Nerds wrangled by "
           ;a
-            =href    "https://twitter.com/_sarlev"
+            =href    "https://twitter.com/sarlev_"
             =target  "_blank"
             =rel     "noopener noreferrer": ~sarlev-sarsen.
         ==
